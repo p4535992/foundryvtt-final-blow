@@ -1,0 +1,124 @@
+{
+    "name": "itemcollection",
+    "title": "Item Containers",
+    "description": "Items that can hold other items - think backpack, sack or bag of holding",
+    "version": "1.8.19",
+    "author": "tposney",
+    "authors": [
+      {
+        "name": "tposney",
+        "url": "https://gitlab.com/tposney",
+        "discord": "",
+        "twitter": "",
+        "patreon": "",
+        "github": "tposney",
+        "ko-fi": "",
+        "reddit": "",
+        "email": ""
+      }
+    ],
+    "type": "module",
+    "socket": true,
+    "includes": [
+      "./assets/**",
+      "./lang/**",
+      "./scripts/**",
+      "./styles/**",
+      "./templates/**",
+      "./module.json",
+      "./README.md",
+      "./icons/**",
+      "./packs/**"
+    ],
+    "media": [
+      {
+        "type": "icon",
+        "location": ""
+      }, 
+      {
+        "type": "cover",
+        "location": ""
+      },
+      {
+        "type": "screenshot",
+        "location": ""
+      }
+    ],
+    "languages": [
+		{
+            "lang": "ar",
+            "name": "Arabic",
+            "path": "lang/ar.json"
+        },
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        },
+        {
+            "lang": "ko",
+            "name": "Korean",
+            "path": "lang/ko.json"
+        },
+        {
+            "lang": "fr",
+            "name": "Français",
+            "path": "lang/fr.json"
+        },
+        {
+            "lang": "ja",
+	        "name": " 日本語",
+            "path": "lang/ja.json"
+        },
+        {
+          "lang": "pt-BR",
+          "name": "Português (Brasil)",
+          "path": "lang/pt-BR.json"
+        },
+	    {
+          "lang": "de",
+          "name": "Deutsch",
+          "path": "lang/de.json"
+        }
+    ],
+    "systems": ["dnd5e"],
+    "scripts": [
+    ],
+    "esmodules": [
+        "ItemCollection.js"   
+    ],
+    "styles": [
+        "styles/ItemCollection.css"
+    ],
+    "packs": [
+      {
+        "name": "itemcollection-premade-bags",
+        "label": "Premade Bags",
+        "system": "dnd5e",
+        "path": "./packs/premade-bags.db",
+        "entity": "Item",
+        "type": "Item",
+        "module": "itemcollection",
+        "lang": ["en"]
+      }
+    ],
+    "url": "https://gitlab.com/tposney/itemcollection/tree/master",
+    "readme": "https://gitlab.com/tposney/itemcollection/raw/master/README.md",
+    "manifest": "https://gitlab.com/tposney/itemcollection/raw/master/package/module.json",
+    "download": "https://gitlab.com/tposney/itemcollection/raw/master/package/itemcollection-v1.8.19.zip",
+    "changelog": "https://gitlab.com/tposney/itemcollection/raw/master/Changelog.md",
+    "minimumCoreVersion": "9",
+    "compatibleCoreVersion": "9",
+    "minimumSystemVersion": "1.5.0",
+    "manifestPlusVersion": "1.2.0",
+    "dependencies": [
+      {
+        "name": "lib-wrapper", "type": "module"
+      }
+    ],
+    "flags": {
+      "manifestPlusVersion": "1.2.0",
+      "allowBugReporter": true
+    }
+    
+}
