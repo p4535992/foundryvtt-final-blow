@@ -2,6 +2,7 @@
 // Logger utility
 // ================================
 
+import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import CONSTANTS from "../constants";
 
 // export let debugEnabled = 0;
@@ -74,3 +75,162 @@ export function dialogWarning(message, icon = 'fas fa-exclamation-triangle') {
 }
 
 // =========================================================================================
+
+
+export async function zeroHPExpiry(actor:Actor, update:ActorData, options, user) {
+  const hpUpdate = getProperty(update, "data.attributes.hp.value");
+  if (hpUpdate !== 0) return;
+  const expiredEffects: string[] = [];
+  for (const effect of actor.effects) {
+    //@ts-ignore
+    if (effect.data.flags?.dae?.specialDuration?.includes("zeroHP")) {
+      expiredEffects.push(<string>effect.data._id);
+    }
+  }
+  if (expiredEffects.length > 0){
+    //@ts-ignore
+    await actor.deleteEmbeddedDocuments("ActiveEffect", expiredEffects, { "expiry-reason": "midi-qol:zeroHP" })
+  }
+}
+
+export async function checkAndApply(actor:Actor, update:ActorData, options, user) {
+  const hpUpdate = getProperty(update, "data.attributes.hp.value");
+  // return wrapped(update,options,user);
+  if (hpUpdate === undefined){
+    return;
+  }
+  //@ts-ignore
+  const attributes = actor.data.data.attributes;
+
+  const needsDead = hpUpdate === 0;
+  if(needsDead){
+    checkAndApplyDead(actor, update, options, user);
+  }
+}
+
+export async function checkAndApplyWounded(actor:Actor, update:ActorData, options, user) {
+  const hpUpdate = getProperty(update, "data.attributes.hp.value");
+  // return wrapped(update,options,user);
+  if (hpUpdate === undefined){
+    return;
+  }
+  //@ts-ignore
+  const attributes = actor.data.data.attributes;
+  // if (configSettings.addWounded > 0) {
+    //@ts-ignore
+    const CEWounded = game.dfreds?.effects?._wounded
+    // const woundedLevel = attributes.hp.max * configSettings.addWounded / 100;
+    // const needsWounded = hpUpdate > 0 && hpUpdate < woundedLevel;
+    const needsWounded = true;
+    if (game.modules.get("dfreds-convenient-effects")?.active && CEWounded) {
+      const wounded = await this.convenientEffectsHasEffect(CEWounded.name, actor.uuid);
+      if (wounded !== needsWounded) {
+        //@ts-ignore
+        await game.dfreds?.effectInterface.toggleEffect(CEWounded.name, { overlay: false, uuids: [actor.uuid] });
+      }
+    } else {
+      const tokens = actor.getActiveTokens();
+      //@ts-ignore
+      const controlled = tokens.filter(t => t._controlled);
+      const token = controlled.length ? controlled.shift() : tokens.shift();
+      const bleeding = CONFIG.statusEffects.find(se => se.id === "bleeding");
+      if (bleeding && token)
+        await token.toggleEffect(<string>bleeding.icon, { overlay: false, active: needsWounded })
+    }
+  // }
+}
+
+export async function checkAndApplyUnconscious(actor:Actor, update:ActorData, options, user) {
+  const hpUpdate = getProperty(update, "data.attributes.hp.value");
+  // return wrapped(update,options,user);
+  if (hpUpdate === undefined){
+    return;
+  }
+  //@ts-ignore
+  const attributes = actor.data.data.attributes;
+  // if (configSettings.addDead) {
+    // const needsDead = hpUpdate === 0;
+    const needsDead = true;
+    if (game.modules.get("dfreds-convenient-effects")?.active && game.settings.get("dfreds-convenient-effects", "modifyStatusEffects") !== "none") {
+      const effectName = this.getConvenientEffectsUnconscious().name;
+      const hasEffect = await this.convenientEffectsHasEffect(effectName, actor.uuid);
+      if ((needsDead !== hasEffect)) {
+        if (!actor.hasPlayerOwner) { // For CE dnd5e does not treat dead as dead for the combat tracker so update it by hand as well
+          let combatant;
+          if (actor.token) combatant = game.combat?.getCombatantByToken(<string>actor.token.id);
+          //@ts-ignore
+          else combatant = game.combat?.getCombatantByActor(actor.id);
+          if (combatant) await combatant.update({ defeated: needsDead })
+        }
+        //@ts-ignore
+        await game.dfreds?.effectInterface.toggleEffect(effectName, { overlay: true, uuids: [actor.uuid] });
+      }
+    }
+    else {
+      const tokens = actor.getActiveTokens();
+      //@ts-ignore
+      const controlled = tokens.filter(t => t._controlled);
+      const token = controlled.length ? controlled.shift() : tokens.shift();
+      if (token) {
+        await token.toggleEffect("/icons/svg/unconscious.svg", { overlay: true, active: needsDead });
+      }
+    }
+  // }
+}
+
+export async function checkAndApplyDead(actor:Actor, update:ActorData, options, user) {
+  const hpUpdate = getProperty(update, "data.attributes.hp.value");
+  // return wrapped(update,options,user);
+  if (hpUpdate === undefined){
+    return;
+  }
+  //@ts-ignore
+  const attributes = actor.data.data.attributes;
+  // if (configSettings.addDead) {
+    // const needsDead = hpUpdate === 0;
+    const needsDead = true;
+    if (game.modules.get("dfreds-convenient-effects")?.active && game.settings.get("dfreds-convenient-effects", "modifyStatusEffects") !== "none") {
+      const effectName = actor.hasPlayerOwner ? this.getConvenientEffectsUnconscious().name : this.getConvenientEffectsDead().name;
+      const hasEffect = await this.convenientEffectsHasEffect(effectName, actor.uuid);
+      if ((needsDead !== hasEffect)) {
+        if (!actor.hasPlayerOwner) { // For CE dnd5e does not treat dead as dead for the combat tracker so update it by hand as well
+          let combatant;
+          if (actor.token) combatant = game.combat?.getCombatantByToken(<string>actor.token.id);
+          //@ts-ignore
+          else combatant = game.combat?.getCombatantByActor(actor.id);
+          if (combatant) await combatant.update({ defeated: needsDead })
+        }
+        //@ts-ignore
+        await game.dfreds?.effectInterface.toggleEffect(effectName, { overlay: true, uuids: [actor.uuid] });
+      }
+    }
+    else {
+      const tokens = actor.getActiveTokens();
+      //@ts-ignore
+      const controlled = tokens.filter(t => t._controlled);
+      const token = controlled.length ? controlled.shift() : tokens.shift();
+      if (token) {
+        if (actor.hasPlayerOwner) {
+          await token.toggleEffect("/icons/svg/unconscious.svg", { overlay: true, active: needsDead });
+        } else {
+          await token.toggleEffect(CONFIG.controlIcons.defeated, { overlay: true, active: needsDead });
+        }
+      }
+    }
+  // }
+}
+
+export async function convenientEffectsHasEffect(effectName: string, uuid: string) {
+  //@ts-ignore
+  return game.dfreds.effectInterface.hasEffectApplied(effectName, uuid);
+},
+
+export function getConvenientEffectsUnconscious() {
+  //@ts-ignore
+  return game.dfreds?.effects?._unconscious;
+},
+
+export function getConvenientEffectsDead() {
+  //@ts-ignore
+  return game.dfreds?.effects?._dead;
+}
