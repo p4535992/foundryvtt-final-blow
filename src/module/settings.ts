@@ -12,6 +12,31 @@ export const registerSettings = function (): void {
 
   // =====================================================================
 
+  game.settings.register(CONSTANTS.MODULE_NAME, 'obfuscateNPCs', {
+		name: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.hint`,
+		type: String,
+		config: true,
+		scope: 'world',
+		choices: <any>{
+			all: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.obfuscateNPCsVisibility.all`,
+			owned: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.obfuscateNPCsVisibility.owned`,
+			token: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.obfuscateNPCsVisibility.token`,
+			any: `${CONSTANTS.MODULE_NAME}.setting.obfuscateNPCs.obfuscateNPCsVisibility.any`,
+		},
+		default: 'all',
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, 'hidePortrait', {
+		name: `${CONSTANTS.MODULE_NAME}.setting.hidePortrait.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.hidePortrait.hint`,
+		type: Boolean,
+		config: true,
+		scope: 'world',
+		default: false,
+	});
+
+
   // ========================================================================
 
   game.settings.register(CONSTANTS.MODULE_NAME, 'debug', {
@@ -19,36 +44,6 @@ export const registerSettings = function (): void {
     hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
     scope: 'client',
     config: true,
-    default: false,
-    type: Boolean,
-  });
-
-  game.settings.register(CONSTANTS.MODULE_NAME, 'debugHooks', {
-    scope: 'world',
-    config: false,
-    default: false,
-    type: Boolean,
-  });
-
-  game.settings.register(CONSTANTS.MODULE_NAME, 'systemFound', {
-    scope: 'world',
-    config: false,
-    default: false,
-    type: Boolean,
-  });
-
-  game.settings.register(CONSTANTS.MODULE_NAME, 'systemNotFoundWarningShown', {
-    scope: 'world',
-    config: false,
-    default: false,
-    type: Boolean,
-  });
-
-  game.settings.register(CONSTANTS.MODULE_NAME, 'preconfiguredSystem', {
-    name: `${CONSTANTS.MODULE_NAME}.setting.preconfiguredSystem.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.preconfiguredSystem.hint`,
-    scope: 'world',
-    config: false,
     default: false,
     type: Boolean,
   });
