@@ -4,6 +4,8 @@
 
 import type { ChatMessageData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import CONSTANTS from '../constants';
+import { FinalBlowEffectDefinitions } from '../final-blow-effect-definitions';
+import { aemlApi } from '../module';
 
 export async function getToken(documentUuid) {
   const document = await fromUuid(documentUuid);
@@ -439,6 +441,15 @@ export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, u
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
   const msg = i18nFormat('final-blow.chat.messages.unconscious', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
+
+  // async addEffectOnToken(tokenId: string, effectName: string, effect: Effect)
+  // async findEffectByNameOnToken(tokenId: string, effectName: string): Promise<ActiveEffect | null>
+  // async hasEffectAppliedOnToken(tokenId: string, effectName: string, includeDisabled: boolean)
+
+  const effect = FinalBlowEffectDefinitions.unconscious();
+  //@ts-ignore
+  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
   // if (hpUpdate === undefined){
@@ -573,9 +584,9 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
           checkAndApplyUnconscious(actor, hpUpdate, user);
         },
       },
-      death: {
+      dead: {
         icon: '<i class="fas fa-skull"></i>',
-        label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.death`),
+        label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.dead`),
         callback: async (html: JQuery<HTMLElement>) => {
           checkAndApplyDead(actor, hpUpdate, user);
         },
@@ -618,6 +629,8 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
     portrait: token?.icon ?? token.actor?.data.token.img,
     hidePortrait: false,
     msg: messageChat,
+    allowProtoMethodsByDefault: true,
+    allowProtoPropertiesByDefault: true,
   };
 
   const obfuscateType = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'obfuscateNPCs');
@@ -670,9 +683,7 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 
   const msgData = {
     content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {
-      data: data,
-      allowProtoMethodsByDefault: true,
-      allowProtoPropertiesByDefault: true,
+      data,
     }),
     speaker: speaker,
     rollMode: !data.hidden ? 'publicroll' : 'gmroll',

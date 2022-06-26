@@ -2,6 +2,8 @@ import API from './api';
 import CONSTANTS from './constants';
 import { warn, error, debug, i18nFormat, renderDialogFinalBlow, chatMessageEvent } from './lib/lib';
 
+export let aemlApi;
+
 export const initHooks = () => {
   warn('Init Hooks processing');
   // setup all the hooks
@@ -9,6 +11,12 @@ export const initHooks = () => {
 
 export const setupHooks = () => {
   warn('Setup Hooks processing');
+
+  //@ts-ignore
+  aemlApi = game.modules.get('active-effect-manager-lib').api;
+
+  //@ts-ignore
+  aemlApi.effectInterface.initialize(CONSTANTS.MODULE_NAME);
 };
 
 export const readyHooks = async () => {

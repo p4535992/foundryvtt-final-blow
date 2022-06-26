@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "itemcollection",
-  "title": "Item Collection\\Item Container",
+  "name": "final-blow",
+  "title": "Final Blow",
   "description": "",
-  "version": "1.3.3",
+  "version": "1.0.0",
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",

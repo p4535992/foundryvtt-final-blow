@@ -39,10 +39,10 @@ export class FinalBlowEffectDefinitions {
         customId: 'wounded',
         name: 'Wounded',
         description: 'Wounded',
-        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/wounded.svg`,
+        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/wounded.svg`,
         transfer: true,
         changes: [],
-        isTemporary: false,
+        isTemporary: true,
         overlay: overlay,
       });
     }
@@ -56,9 +56,9 @@ export class FinalBlowEffectDefinitions {
         customId: 'unconscious',
         name: 'Unconscious',
         description: 'Unconscious',
-        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/unconscious.svg`,
+        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/unconscious.svg`,
         changes: [],
-        isTemporary: false,
+        isTemporary: true,
         overlay: overlay,
       });
     }
@@ -72,9 +72,9 @@ export class FinalBlowEffectDefinitions {
         customId: 'dead',
         name: 'Dead',
         description: 'No active effects',
-        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/skull.svg`,
+        icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/skull.svg`,
         changes: [],
-        isTemporary: false,
+        isTemporary: true,
         overlay: overlay,
       });
     }
