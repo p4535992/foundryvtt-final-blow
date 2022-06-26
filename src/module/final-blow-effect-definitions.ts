@@ -1,11 +1,11 @@
-import CONSTANTS from "./constants";
-import Effect from "./effects/effect";
-import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenientEffectsWounded } from "./lib/lib";
+import CONSTANTS from './constants';
+import Effect from './effects/effect';
+import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenientEffectsWounded } from './lib/lib';
 
 /**
  * Defines all of the effect definitions
  */
- export class FinalBlowEffectDefinitions {
+export class FinalBlowEffectDefinitions {
   constructor() {}
 
   /**
@@ -17,24 +17,24 @@ import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenien
     const effects: Effect[] = [];
 
     const wounded = FinalBlowEffectDefinitions.wounded(overlay);
-    if(wounded){
+    if (wounded) {
       effects.push(wounded);
     }
     const unconscious = FinalBlowEffectDefinitions.unconscious(overlay);
-    if(unconscious){
+    if (unconscious) {
       effects.push(unconscious);
     }
     const dead = FinalBlowEffectDefinitions.dead(overlay);
-    if(dead){
+    if (dead) {
       effects.push(dead);
     }
     return effects;
   }
 
-  static wounded(overlay = true):Effect {
-    if (game.modules.get("dfreds-convenient-effects")?.active){
+  static wounded(overlay = true): Effect {
+    if (game.modules.get('dfreds-convenient-effects')?.active) {
       return getConvenientEffectsWounded();
-    }else{
+    } else {
       return new Effect({
         customId: 'wounded',
         name: 'Wounded',
@@ -43,15 +43,15 @@ import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenien
         transfer: true,
         changes: [],
         isTemporary: false,
-        overlay: overlay
+        overlay: overlay,
       });
     }
   }
 
   static unconscious(overlay = true) {
-    if (game.modules.get("dfreds-convenient-effects")?.active){
+    if (game.modules.get('dfreds-convenient-effects')?.active) {
       return getConvenientEffectsUnconscious();
-    }else{
+    } else {
       return new Effect({
         customId: 'unconscious',
         name: 'Unconscious',
@@ -59,15 +59,15 @@ import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenien
         icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/unconscious.svg`,
         changes: [],
         isTemporary: false,
-        overlay: overlay
+        overlay: overlay,
       });
     }
   }
 
   static dead(overlay = true) {
-    if (game.modules.get("dfreds-convenient-effects")?.active){
+    if (game.modules.get('dfreds-convenient-effects')?.active) {
       return getConvenientEffectsDead();
-    }else{
+    } else {
       return new Effect({
         customId: 'dead',
         name: 'Dead',
@@ -75,7 +75,7 @@ import { getConvenientEffectsDead, getConvenientEffectsUnconscious, getConvenien
         icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/skull.svg`,
         changes: [],
         isTemporary: false,
-        overlay: overlay
+        overlay: overlay,
       });
     }
   }

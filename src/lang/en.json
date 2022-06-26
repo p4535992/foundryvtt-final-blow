@@ -1,15 +1,14 @@
 {
-  "final-blow.dialog.contentmessage":"This is a \"FINAL BLOW\", decide what to do...",
-  "final-blow.dialog.decidethefinalblow":"",
-  "final-blow.dialog.wounded":"Hurt him",
-  "final-blow.dialog.unconscious":"Make him unconscious",
-  "final-blow.dialog.dead":"Kill him!",
-  "final-blow.dialog.cancel":"Do nothing",
+  "final-blow.dialog.contentmessage": "This is a \"FINAL BLOW\", decide what to do...",
+  "final-blow.dialog.decidethefinalblow": "",
+  "final-blow.dialog.wounded": "Hurt him",
+  "final-blow.dialog.unconscious": "Make him unconscious",
+  "final-blow.dialog.dead": "Kill him!",
+  "final-blow.dialog.cancel": "Do nothing",
 
-  "final-blow.chat.messages.wounded":"{token} is been wounded",
-  "final-blow.chat.messages.unconscious":"{token} is made unconscious",
-  "final-blow.chat.messages.dead":"{token} is been killed",
-
+  "final-blow.chat.messages.wounded": "{token} is been wounded",
+  "final-blow.chat.messages.unconscious": "{token} is made unconscious",
+  "final-blow.chat.messages.dead": "{token} is been killed",
 
   "final-blow.chat.messages.turn": "{name}'s turn",
   "final-blow.chat.messages.unidentifiedTurn": "???",

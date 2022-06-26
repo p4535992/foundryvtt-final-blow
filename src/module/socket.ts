@@ -13,7 +13,6 @@ export function registerSocket() {
   //@ts-ignore
   finalBlowSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
 
-
   setSocket(finalBlowSocket);
   return finalBlowSocket;
 }

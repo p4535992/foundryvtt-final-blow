@@ -23,23 +23,21 @@ import type API from './module/api.js';
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once('init', async () => {
-	console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+  console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
 
-	// Register custom module settings
-	registerSettings();
-	initHooks();
+  // Register custom module settings
+  registerSettings();
+  initHooks();
 
   // Preload Handlebars templates
-	//await preloadTemplates();
-
-
+  //await preloadTemplates();
 });
 
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
 Hooks.once('setup', function () {
-	// Do anything after initialization but before ready
+  // Do anything after initialization but before ready
   setupHooks();
 });
 
@@ -47,13 +45,12 @@ Hooks.once('setup', function () {
 /* When ready							*/
 /* ------------------------------------ */
 Hooks.once('ready', async () => {
-	// Do anything once the module is ready
-	if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM){
-   	error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`, true);
-		return;
-	}
-	readyHooks();
-
+  // Do anything once the module is ready
+  if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
+    error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`, true);
+    return;
+  }
+  readyHooks();
 });
 
 /* ------------------------------------ */

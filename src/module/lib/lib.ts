@@ -2,8 +2,8 @@
 // Module Generic function
 // =============================
 
-import type { ChatMessageData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import CONSTANTS from "../constants";
+import type { ChatMessageData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
+import CONSTANTS from '../constants';
 
 export async function getToken(documentUuid) {
   const document = await fromUuid(documentUuid);
@@ -349,9 +349,6 @@ function getElevationPlaceableObject(placeableObject: any): number {
 // Module specific function
 // =============================
 
-
-
-
 // export async function zeroHPExpiry(actor:Actor, hpUpdate:number, user) {
 //   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
 //   // if (hpUpdate !== 0) return;
@@ -384,14 +381,14 @@ function getElevationPlaceableObject(placeableObject: any): number {
 //   }
 // }
 
-export async function checkAndApplyWounded(actor:Actor, hpUpdate:number, user:User) {
+export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
-  const controlled = tokens.filter(t => t._controlled);
+  const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
-  const msg = i18nFormat("final-blow.chat.messages.wounded",{token:token?.name});
-  generateCardsFromToken(token, actor,  msg);
-  if (game.modules.get("mmm")?.active){
+  const msg = i18nFormat('final-blow.chat.messages.wounded', { token: token?.name });
+  generateCardsFromToken(token, actor, msg);
+  if (game.modules.get('mmm')?.active) {
     //@ts-ignore
     MaxwelMaliciousMaladies.displayDialog();
   }
@@ -435,13 +432,13 @@ export async function checkAndApplyWounded(actor:Actor, hpUpdate:number, user:Us
   */
 }
 
-export async function checkAndApplyUnconscious(actor:Actor, hpUpdate:number, user:User) {
+export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
-  const controlled = tokens.filter(t => t._controlled);
+  const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
-  const msg = i18nFormat("final-blow.chat.messages.unconscious",{token:token?.name});
-  generateCardsFromToken(token, actor,  msg);
+  const msg = i18nFormat('final-blow.chat.messages.unconscious', { token: token?.name });
+  generateCardsFromToken(token, actor, msg);
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
   // if (hpUpdate === undefined){
@@ -482,13 +479,13 @@ export async function checkAndApplyUnconscious(actor:Actor, hpUpdate:number, use
   */
 }
 
-export async function checkAndApplyDead(actor:Actor, hpUpdate:number, user:User) {
+export async function checkAndApplyDead(actor: Actor, hpUpdate: number, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
-  const controlled = tokens.filter(t => t._controlled);
+  const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
-  const msg = i18nFormat("final-blow.chat.messages.dead",{token:token?.name});
-  generateCardsFromToken(token, actor,  msg);
+  const msg = i18nFormat('final-blow.chat.messages.dead', { token: token?.name });
+  generateCardsFromToken(token, actor, msg);
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
   // if (hpUpdate === undefined){
@@ -552,8 +549,7 @@ export function getConvenientEffectsWounded() {
   return <Effect>game.dfreds?.effects?._wounded;
 }
 
-export async function renderDialogFinalBlow(actor: Actor, hpUpdate:number, user:User){
-
+export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user: User) {
   // const template = await renderTemplate(
   //   `modules/${CONSTANTS.MODULE_NAME}/templates/XXX.hbs`,
   //   data,
@@ -568,21 +564,21 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate:number, user:
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.wounded`),
         callback: async (html: JQuery<HTMLElement>) => {
           checkAndApplyWounded(actor, hpUpdate, user);
-        }
+        },
       },
       unconscious: {
         icon: '<i class="fas fa-dizzy"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.unconscious`),
         callback: async (html: JQuery<HTMLElement>) => {
           checkAndApplyUnconscious(actor, hpUpdate, user);
-        }
+        },
       },
       death: {
         icon: '<i class="fas fa-skull"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.death`),
         callback: async (html: JQuery<HTMLElement>) => {
           checkAndApplyDead(actor, hpUpdate, user);
-        }
+        },
       },
       cancel: {
         icon: '<i class="fas fa-times"></i>',
@@ -590,135 +586,144 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate:number, user:
       },
     },
     render: (html: JQuery<HTMLElement>) => {
-     //
+      //
     },
     default: 'cancel',
   });
   d.render(true);
 }
 
-
-export async function generateCardsFromToken(token:Token, actor:Actor, messageChat:string) {
+export async function generateCardsFromToken(token: Token, actor: Actor, messageChat: string) {
   const data = {
-		actor: actor,
-		combatant: null,
-		combat: null,
-		last: null, //revious,
-		token: canvas.scene ? canvas.tokens?.get(token?.id) : null, // TODO: This can be wrong
-		// get round() { return this.combat?.round; },
-		// get turn() { return this.combat?.turn; },
-		user: game.user,
-		get player() { return this.user?.name; },
-		name: token?.name,
-		label: '',
-		get hidden() { return this.combatant?.hidden ?? false; },
-		get visible() { return this.combatant?.visible ?? false; },
-		obfuscated: false,
+    actor: actor,
+    combatant: null,
+    combat: null,
+    last: null, //revious,
+    token: canvas.scene ? canvas.tokens?.get(token?.id) : null, // TODO: This can be wrong
+    // get round() { return this.combat?.round; },
+    // get turn() { return this.combat?.turn; },
+    user: game.user,
+    get player() {
+      return this.user?.name;
+    },
+    name: token?.name,
+    label: '',
+    get hidden() {
+      return this.combatant?.hidden ?? false;
+    },
+    get visible() {
+      return this.combatant?.visible ?? false;
+    },
+    obfuscated: false,
     portrait: token?.icon ?? token.actor?.data.token.img,
-    hidePortrait:false,
-    msg: messageChat
-	};
+    hidePortrait: false,
+    msg: messageChat,
+  };
 
-	const obfuscateType = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'obfuscateNPCs');
-	const hasVisibleName = () => data.token ? [30, 50].includes(data.token.data.displayName) : true; // 30=hovered by anyone or 50=always for everyone
-	const obfuscate = {
-		get all() {
-			return false;
-		},
-		get owned() {
-			return !data.actor?.hasPlayerOwner;
-		},
-		get token() {
-			return !hasVisibleName();
-		},
-		get any() {
-			return !(data.actor?.hasPlayerOwner || hasVisibleName());
-		}
-	};
-	data.obfuscated = obfuscate[obfuscateType] ?? false;
-	if (data.obfuscated){
+  const obfuscateType = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'obfuscateNPCs');
+  const hasVisibleName = () => (data.token ? [30, 50].includes(data.token.data.displayName) : true); // 30=hovered by anyone or 50=always for everyone
+  const obfuscate = {
+    get all() {
+      return false;
+    },
+    get owned() {
+      return !data.actor?.hasPlayerOwner;
+    },
+    get token() {
+      return !hasVisibleName();
+    },
+    get any() {
+      return !(data.actor?.hasPlayerOwner || hasVisibleName());
+    },
+  };
+  data.obfuscated = obfuscate[obfuscateType] ?? false;
+  if (data.obfuscated) {
     data.name = i18n('final-blow.chat.messages.unidentifiedTurn');
   }
-	data.label = i18nFormat('final-blow.chat.messages.turn', { name: `<span class='name'>${data.name}</span>` });
+  data.label = i18nFormat('final-blow.chat.messages.turn', { name: `<span class='name'>${data.name}</span>` });
 
-	if (!data.portrait || game.settings.get(CONSTANTS.MODULE_NAME, 'hidePortrait')){
-		data.hidePortrait = true;
+  if (!data.portrait || game.settings.get(CONSTANTS.MODULE_NAME, 'hidePortrait')) {
+    data.hidePortrait = true;
   }
 
-	// const defeated = data.combatant.data.defeated;
-	// const msgs:ChatMessageData[] = [];
-	// if (game.settings.get(CFG.module, CFG.SETTING.missedKey)) {
-	// 	const msg = missedTurn(data, context);
-	// 	if (msg) msgs.push(msg);
-	// }
+  // const defeated = data.combatant.data.defeated;
+  // const msgs:ChatMessageData[] = [];
+  // if (game.settings.get(CFG.module, CFG.SETTING.missedKey)) {
+  // 	const msg = missedTurn(data, context);
+  // 	if (msg) msgs.push(msg);
+  // }
 
-	// if (defeated) return msgs; // undesired
-	// if (data.last?.combatant != null && data.last.combatant.id === data.combatant.id) return msgs; // don't report the same thing multiple times
+  // if (defeated) return msgs; // undesired
+  // if (data.last?.combatant != null && data.last.combatant.id === data.combatant.id) return msgs; // don't report the same thing multiple times
 
-	const getUsers = (thing, permission) => Object.entries(thing.data.permission).filter(u => <User>u[1] >= permission).map(u => u[0]);
+  const getUsers = (thing, permission) =>
+    Object.entries(thing.data.permission)
+      .filter((u) => <User>u[1] >= permission)
+      .map((u) => u[0]);
 
-	const speaker = data.obfuscated ? { user: game.user?.id } : ChatMessage.getSpeaker({
-    token: data.token?.document,
-    actor: <Actor>data.actor
-  });
+  const speaker = data.obfuscated
+    ? { user: game.user?.id }
+    : ChatMessage.getSpeaker({
+        token: data.token?.document,
+        actor: <Actor>data.actor,
+      });
 
-	const msgData = {
-		content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`,
-    {
-        data:data,
-        allowProtoMethodsByDefault: true,
-        allowProtoPropertiesByDefault: true
+  const msgData = {
+    content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {
+      data: data,
+      allowProtoMethodsByDefault: true,
+      allowProtoPropertiesByDefault: true,
     }),
-		speaker:speaker,
-		rollMode: !data.hidden ? 'publicroll' : 'gmroll',
-		whisper: !data.hidden ? [] : getUsers(data.actor, CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER),
-		flags: {
-			[CONSTANTS.MODULE_NAME]: {
-				enabled: true,
-			}
-		},
-	};
+    speaker: speaker,
+    rollMode: !data.hidden ? 'publicroll' : 'gmroll',
+    whisper: !data.hidden ? [] : getUsers(data.actor, CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER),
+    flags: {
+      [CONSTANTS.MODULE_NAME]: {
+        enabled: true,
+      },
+    },
+  };
 
-	// msgs.push(<any>msgData);
+  // msgs.push(<any>msgData);
 
   ChatMessage.create(msgData);
 }
-
 
 /**
  * @param {ChatMessage} cm
  * @param {JQuery} jq
  * @param {Object} _options
  */
-export function chatMessageEvent(token:Token, cm:ChatMessage, jq:JQuery<HTMLElement>, _options) {
-	const isGM = game.user?.isGM;
-	const cmd = cm;
+export function chatMessageEvent(token: Token, cm: ChatMessage, jq: JQuery<HTMLElement>, _options) {
+  const isGM = game.user?.isGM;
+  const cmd = cm;
 
-	const html = <HTMLElement>jq[0];
+  const html = <HTMLElement>jq[0];
 
-	const main = html.closest('[data-message-id]');
-	html?.classList.add('turn-announcer', 'final-blow');
+  const main = html.closest('[data-message-id]');
+  html?.classList.add('turn-announcer', 'final-blow');
 
-	// compressTurnAnnounceMessage(cm, html, main);
-  html.querySelectorAll('.message-sender,.message-timestamp')
-    ?.forEach((el:HTMLElement) => el.style.display = 'none');
+  // compressTurnAnnounceMessage(cm, html, main);
+  html
+    .querySelectorAll('.message-sender,.message-timestamp')
+    ?.forEach((el: HTMLElement) => (el.style.display = 'none'));
   const db = html.querySelector('.message-header .message-delete');
   const content = html.querySelector('.message-content');
   const mb = content?.querySelector('.turn-announcer');
-  if (db && mb){
+  if (db && mb) {
     mb.append(db);
   }
 
-	main?.querySelector('.whisper-to')?.remove();
+  main?.querySelector('.whisper-to')?.remove();
 
-	// De-obfuscate name for GM
-	if (isGM && cm.getFlag(CONSTANTS.MODULE_NAME, 'obfuscated')) {
-		if (token) {
-			const name = html.querySelector('.actor .name-box .name');
-			if (name){
+  // De-obfuscate name for GM
+  if (isGM && cm.getFlag(CONSTANTS.MODULE_NAME, 'obfuscated')) {
+    if (token) {
+      const name = html.querySelector('.actor .name-box .name');
+      if (name) {
         name.textContent = token.name;
       }
-			html.classList.add('obfuscated');
-		}
-	}
+      html.classList.add('obfuscated');
+    }
+  }
 }

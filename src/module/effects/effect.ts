@@ -55,7 +55,7 @@ export default class Effect {
     transfer = false,
     atcvChanges = <any[]>[],
     dae = {},
-    overlay = false
+    overlay = false,
   }) {
     this.customId = customId;
     this.name = name;
@@ -80,7 +80,7 @@ export default class Effect {
     this.isDisabled = isDisabled;
     this.isTemporary = isTemporary;
     this.isSuppressed = isSuppressed;
-    this.overlay =overlay;
+    this.overlay = overlay;
   }
 
   /**
