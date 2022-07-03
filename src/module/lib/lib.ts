@@ -388,8 +388,16 @@ export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user:
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
-  const msg = i18nFormat('final-blow.chat.messages.wounded', { token: token?.name });
+  const msg = i18nFormat('final-blow.chat.messages.wounded', { 
+    token: token?.name,
+    player: user.name
+  });
   generateCardsFromToken(token, actor, msg);
+
+  const effect = FinalBlowEffectDefinitions.wounded();
+  //@ts-ignore
+  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+
   if (game.modules.get('mmm')?.active) {
     //@ts-ignore
     MaxwelMaliciousMaladies.displayDialog();
@@ -442,10 +450,6 @@ export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, u
   const msg = i18nFormat('final-blow.chat.messages.unconscious', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
 
-  // async addEffectOnToken(tokenId: string, effectName: string, effect: Effect)
-  // async findEffectByNameOnToken(tokenId: string, effectName: string): Promise<ActiveEffect | null>
-  // async hasEffectAppliedOnToken(tokenId: string, effectName: string, includeDisabled: boolean)
-
   const effect = FinalBlowEffectDefinitions.unconscious();
   //@ts-ignore
   aemlApi.addEffectOnToken(token.id, effect.name, effect);
@@ -497,6 +501,11 @@ export async function checkAndApplyDead(actor: Actor, hpUpdate: number, user: Us
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
   const msg = i18nFormat('final-blow.chat.messages.dead', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
+
+  const effect = FinalBlowEffectDefinitions.dead();
+  //@ts-ignore
+  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
   // if (hpUpdate === undefined){
@@ -610,23 +619,23 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
     combatant: null,
     combat: null,
     last: null, //revious,
-    token: canvas.scene ? canvas.tokens?.get(token?.id) : null, // TODO: This can be wrong
+    token: token || null, // canvas.scene ? canvas.tokens?.get(token?.id) : null, // TODO: This can be wrong
     // get round() { return this.combat?.round; },
     // get turn() { return this.combat?.turn; },
     user: game.user,
     get player() {
-      return this.user?.name;
+      return game.user?.name;
     },
     name: token?.name,
     label: '',
     get hidden() {
-      return this.combatant?.hidden ?? false;
+      return false; // token.isOwner ?? false;
     },
     get visible() {
-      return this.combatant?.visible ?? false;
+      return token.isOwner ?? false; // this.combatant?.visible ?? false;
     },
     obfuscated: false,
-    portrait: token?.icon ?? token.actor?.data.token.img,
+    portrait: token.data.img, // token?.icon ?? token.data.img ?? token.actor?.data.token.img,
     hidePortrait: false,
     msg: messageChat,
     allowProtoMethodsByDefault: true,
@@ -651,9 +660,15 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
   };
   data.obfuscated = obfuscate[obfuscateType] ?? false;
   if (data.obfuscated) {
-    data.name = i18n('final-blow.chat.messages.unidentifiedTurn');
+    data.name = i18n('final-blow.chat.messages.unidentifiedblow');
   }
-  data.label = i18nFormat('final-blow.chat.messages.turn', { name: `<span class='name'>${data.name}</span>` });
+  data.label = i18nFormat('final-blow.chat.messages.blow', 
+    { 
+      // name: `<span class='name'>${data.name}</span>`,
+      name: data.name,
+      player: data.player
+    }
+  );
 
   if (!data.portrait || game.settings.get(CONSTANTS.MODULE_NAME, 'hidePortrait')) {
     data.hidePortrait = true;
@@ -683,7 +698,7 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 
   const msgData = {
     content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {
-      data,
+      data: data,
     }),
     speaker: speaker,
     rollMode: !data.hidden ? 'publicroll' : 'gmroll',
@@ -720,7 +735,7 @@ export function chatMessageEvent(token: Token, cm: ChatMessage, jq: JQuery<HTMLE
     ?.forEach((el: HTMLElement) => (el.style.display = 'none'));
   const db = html.querySelector('.message-header .message-delete');
   const content = html.querySelector('.message-content');
-  const mb = content?.querySelector('.turn-announcer');
+  const mb = content?.querySelector('.blow-announcer');
   if (db && mb) {
     mb.append(db);
   }

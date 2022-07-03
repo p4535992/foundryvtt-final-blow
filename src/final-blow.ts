@@ -45,11 +45,11 @@ Hooks.once('setup', function () {
 /* When ready							*/
 /* ------------------------------------ */
 Hooks.once('ready', async () => {
-  // Do anything once the module is ready
-  if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
-    error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`, true);
-    return;
-  }
+  // // Do anything once the module is ready
+  // if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
+  //   error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`, true);
+  //   return;
+  // }
   readyHooks();
 });
 

@@ -1,11 +1,19 @@
-<div class='turn-announcer flexrow' data-is-final-blow="true" data-actor-id="{{actor.id}}" data-user-id="{{user.id}}" data-token-id="{{token.id}}">
+<div class='turn-announcer flexrow' 
+	data-is-final-blow="true" 
+	data-actor-id="{{data.actor.id}}" 
+	data-user-id="{{data.user.id}}" 
+	data-token-id="{{data.token.id}}">
 	{{#unless hidePortrait}}
 	<div class='portrait' style='flex: 0 0 48px; height: 48px; width: 48px;'>
-		<img src='{{portrait}}' />
+		<img src='{{data.portrait}}' />
 	</div>
 	{{/unless}}
 	<div class='text' style='margin-left: 3px;'>
-		<h2 class='actor' style='margin-bottom: 3px; font-size: 1.2em;'><span class='name-box'>{{{label}}}</span></h2>
-		<span class='player'><span class='name'>{{player}}</span></span>
+		<h2 class='actor' style='margin-bottom: 3px; font-size: 1.2em;'>
+			<span class='name-box'>{{{data.msg}}}</span>
+		</h2>
+		<span class='player'>
+			<span class='name'>{{data.label}}</span>
+		</span>
 	</div>
 </div>

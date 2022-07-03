@@ -76,7 +76,7 @@
   "allowBugReporter": true,
   "dependencies": [
     {
-      "name": "lib-wrapper",
+      "name": "active-effect-manager-lib",
       "type": "module"
     }
   ],

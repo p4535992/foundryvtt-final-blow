@@ -1,38 +1,38 @@
-#chat .chat-message.final-blow.turn-announcer {
+#chat .chat-message.final-blow.blow-announcer {
   border: none;
 }
-#chat .chat-message.final-blow.turn-announcer .text {
+#chat .chat-message.final-blow.blow-announcer .text {
   margin-left: 3px;
   /* DEPRECATED */
   flex: 4 0 4em;
 }
-#chat .chat-message.final-blow.turn-announcer .portrait {
+#chat .chat-message.final-blow.blow-announcer .portrait {
   /* DEPRECATED */
   flex: 0 0 48px;
   height: 48px;
   width: 48px;
 }
-#chat .chat-message.final-blow.turn-announcer h2.actor {
+#chat .chat-message.final-blow.blow-announcer h2.actor {
   /* DEPRECATED */
   font-size: 1.2em;
   margin-bottom: 3px;
 }
-#chat .chat-message.final-blow.turn-announcer .player {
+#chat .chat-message.final-blow.blow-announcer .player {
   /* DEPRECATED */
   margin: 0;
 }
-#chat .chat-message.final-blow.turn-announcer.whisper {
+#chat .chat-message.final-blow.blow-announcer.whisper {
   background-color: #863b3b;
   border-color: #d2982d;
 }
-#chat .chat-message.final-blow.turn-announcer .message-delete {
+#chat .chat-message.final-blow.blow-announcer .message-delete {
   flex: 0;
   margin-right: 1px;
 }
-#chat .chat-message.final-blow.turn-announcer.obfuscated {
+#chat .chat-message.final-blow.blow-announcer.obfuscated {
   background: #c7baba;
 }
-#chat .chat-message.final-blow.missed-turn-announcer {
+#chat .chat-message.final-blow.missed-blow-announcer {
   display: block;
   flex-direction: row;
   flex: 5 0.5 8em;
@@ -43,7 +43,7 @@
   line-height: 1em;
   white-space: nowrap;
 }
-#chat .chat-message.final-blow.missed-turn-announcer .missed-token {
+#chat .chat-message.final-blow.missed-blow-announcer .missed-token {
   text-shadow: black -1px -1px 0, black 1px -1px 0, black -1px 1px 0, black 1px 1px 0;
   /*
 			-webkit-text-stroke-width: 1px;
@@ -54,7 +54,7 @@
   font-size: 12px;
   align-self: center;
 }
-#chat .chat-message.final-blow.missed-turn-announcer .message-metadata {
+#chat .chat-message.final-blow.missed-blow-announcer .message-metadata {
   flex: 0;
   text-shadow: orange -1px -1px 0, orange 1px -1px 0, orange -1px 1px 0, orange 1px 1px 0;
 }

@@ -14,7 +14,15 @@
 
 ### If you want to buy me a coffee [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/p4535992)
 
-XXX
+This module is given the possibility during the final blow to the enemy (the one that brings him to 0hp), to show a dialog box where the player is asked if the blow is lethal or not. So we give the choice to decide whether to apply the state of "Unconscious "or" Death " token by token.
+
+The choice is written on chat so that everyone can see it.
+
+A dialogue will popout and ask with some options depending on your preferences.
+
+The request arises from the fact that so I don't have to ask repeatedly:
+
+_"It's a lethal blow ... do you want to kill him or not?"_ and avoid discussions related to this...
 
 ## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder
 
@@ -31,25 +39,16 @@ To install this module manually:
 4.  Click 'Install' and wait for installation to complete
 5.  Don't forget to enable the module in game using the "Manage Module" button
 
-### libWrapper
-
-This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
-
-### socketlib
-
-This module uses the [socketlib](https://github.com/manuelVo/foundryvtt-socketlib) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
-
 
 ## Known Issue\Limitation
 
 
 ## Usage
 
-XXX
+When any token reach the hp 0, a dialog popout asking for the final blow.
 
 ## Api
 
-XXX
 
 ## [Changelog](./CHANGELOG.md)
 
@@ -61,6 +60,7 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 
 - Some icons are retrieve from the [Dnd5e system](https://gitlab.com/foundrynet/dnd5e) with [MIT](https://gitlab.com/foundrynet/dnd5e/-/blob/master/LICENSE.txt)
 - Some icons are retrieve from the [Pf2 system](https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/) with [GPLv2](https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/LICENSE)
+- Some setting and the chat template are acustomized version ot he one give from the module [Koboldworks Turn Announcer](https://gitlab.com/koboldworks/agnostic/turn-announcer/) with license [MIT](https://gitlab.com/koboldworks/agnostic/turn-announcer/-/blob/master/LICENSE)
 
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 
@@ -72,8 +72,4 @@ Bootstrapped with League of Extraordinary FoundryVTT Developers  [foundry-vtt-ty
 
 Thanks to anyone who helps me with this code! I appreciate the user community's feedback on this project!
 
-Very special ty to [Szefo09](https://github.com/szefo09) for make a full operational patch for Dnd5e with FoundryVtt 0.8.6 and 9
-
-Very special ty to [Teshynil](https://github.com/Teshynil) for make many and many test with bug fix
-
-Very special ty to [Haxxer](https://github.com/fantasycalendar) for inspired the design pattern for the multisystem integration with the module [Item Piles](https://github.com/fantasycalendar/FoundryVTT-ItemPiles)
+Ty to [koboldworks](https://gitlab.com/koboldworks/) for the module  [Koboldworks Turn Announcer](https://gitlab.com/koboldworks/agnostic/turn-announcer/)

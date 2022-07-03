@@ -6,12 +6,12 @@
   "final-blow.dialog.dead": "Kill him!",
   "final-blow.dialog.cancel": "Do nothing",
 
-  "final-blow.chat.messages.wounded": "{token} is been wounded",
-  "final-blow.chat.messages.unconscious": "{token} is made unconscious",
-  "final-blow.chat.messages.dead": "{token} is been killed",
+  "final-blow.chat.messages.wounded": "'{token}' is been wounded!",
+  "final-blow.chat.messages.unconscious": "'{token}' is made unconscious!",
+  "final-blow.chat.messages.dead": "'{token}' is been killed!",
 
-  "final-blow.chat.messages.turn": "{name}'s turn",
-  "final-blow.chat.messages.unidentifiedTurn": "???",
+  "final-blow.chat.messages.blow": "Final blow on '{name}'!",
+  "final-blow.chat.messages.unidentifiedblow": "???",
 
   "final-blow.setting.obfuscateNPCs.name": "Display names",
   "final-blow.setting.obfuscateNPCs.hint": "Obfuscate names of certain combatants for players. GM will see names as normal with slightly altered turn announcer card.",
