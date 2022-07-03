@@ -36,9 +36,9 @@ export class FinalBlowEffectDefinitions {
       return getConvenientEffectsWounded();
     } else {
       return new Effect({
-        customId: 'wounded',
-        name: 'Wounded',
-        description: 'Wounded',
+        customId: 'woundedblow',
+        name: 'Wounded Blow',
+        description: 'No active effects',
         icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/bleeding-wound-blow.svg`,
         transfer: true,
         changes: [],
@@ -53,9 +53,9 @@ export class FinalBlowEffectDefinitions {
       return getConvenientEffectsUnconscious();
     } else {
       return new Effect({
-        customId: 'unconscious',
-        name: 'Unconscious',
-        description: 'Unconscious',
+        customId: 'unconsciousblow',
+        name: 'Unconscious Blow',
+        description: 'No active effects',
         icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/unconscious-blow.svg`,
         changes: [],
         isTemporary: true,
@@ -69,8 +69,8 @@ export class FinalBlowEffectDefinitions {
       return getConvenientEffectsDead();
     } else {
       return new Effect({
-        customId: 'dead',
-        name: 'Dead',
+        customId: 'deadblow',
+        name: 'Dead Blow',
         description: 'No active effects',
         icon: `modules/${CONSTANTS.MODULE_NAME}/icons/svg/pirate-grave-blow.svg`,
         changes: [],

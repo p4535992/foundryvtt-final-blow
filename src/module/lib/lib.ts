@@ -388,9 +388,9 @@ export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user:
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
-  const msg = i18nFormat('final-blow.chat.messages.wounded', { 
+  const msg = i18nFormat('final-blow.chat.messages.wounded', {
     token: token?.name,
-    player: user.name
+    player: user.name,
   });
   generateCardsFromToken(token, actor, msg);
 
@@ -662,13 +662,11 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
   if (data.obfuscated) {
     data.name = i18n('final-blow.chat.messages.unidentifiedblow');
   }
-  data.label = i18nFormat('final-blow.chat.messages.blow', 
-    { 
-      // name: `<span class='name'>${data.name}</span>`,
-      name: data.name,
-      player: data.player
-    }
-  );
+  data.label = i18nFormat('final-blow.chat.messages.blow', {
+    // name: `<span class='name'>${data.name}</span>`,
+    name: data.name,
+    player: data.player,
+  });
 
   if (!data.portrait || game.settings.get(CONSTANTS.MODULE_NAME, 'hidePortrait')) {
     data.hidePortrait = true;

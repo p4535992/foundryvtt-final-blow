@@ -3,7 +3,7 @@
   "name": "final-blow",
   "title": "Final Blow",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",
