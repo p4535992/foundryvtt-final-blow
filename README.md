@@ -24,6 +24,8 @@ The request arises from the fact that so I don't have to ask repeatedly:
 
 _"It's a lethal blow ... do you want to kill him or not?"_ and avoid discussions related to this...
 
+![img](./wiki/tutorial1.gif)
+
 ## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder
 
 

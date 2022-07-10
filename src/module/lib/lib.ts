@@ -383,7 +383,7 @@ function getElevationPlaceableObject(placeableObject: any): number {
 //   }
 // }
 
-export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user: User) {
+export async function checkAndApplyWounded(actor: Actor, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -395,8 +395,16 @@ export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user:
   generateCardsFromToken(token, actor, msg);
 
   const effect = FinalBlowEffectDefinitions.wounded();
-  //@ts-ignore
-  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
+  if (!activeEffect) {
+    await aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  } else {
+    if (activeEffect.data.disabled) {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+    } else {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+    }
+  }
 
   if (game.modules.get('mmm')?.active) {
     //@ts-ignore
@@ -442,7 +450,7 @@ export async function checkAndApplyWounded(actor: Actor, hpUpdate: number, user:
   */
 }
 
-export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, user: User) {
+export async function checkAndApplyUnconscious(actor: Actor, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -451,8 +459,16 @@ export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, u
   generateCardsFromToken(token, actor, msg);
 
   const effect = FinalBlowEffectDefinitions.unconscious();
-  //@ts-ignore
-  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
+  if (!activeEffect) {
+    await aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  } else {
+    if (activeEffect.data.disabled) {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+    } else {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+    }
+  }
 
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
@@ -494,7 +510,7 @@ export async function checkAndApplyUnconscious(actor: Actor, hpUpdate: number, u
   */
 }
 
-export async function checkAndApplyDead(actor: Actor, hpUpdate: number, user: User) {
+export async function checkAndApplyDead(actor: Actor, user: User) {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -503,8 +519,16 @@ export async function checkAndApplyDead(actor: Actor, hpUpdate: number, user: Us
   generateCardsFromToken(token, actor, msg);
 
   const effect = FinalBlowEffectDefinitions.dead();
-  //@ts-ignore
-  aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
+  if (!activeEffect) {
+    await aemlApi.addEffectOnToken(token.id, effect.name, effect);
+  } else {
+    if (activeEffect.data.disabled) {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+    } else {
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+    }
+  }
 
   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
   // return wrapped(update,options,user);
@@ -583,21 +607,21 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
         icon: '<i class="fas fa-tint"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.wounded`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyWounded(actor, hpUpdate, user);
+          checkAndApplyWounded(actor, user);
         },
       },
       unconscious: {
         icon: '<i class="fas fa-dizzy"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.unconscious`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyUnconscious(actor, hpUpdate, user);
+          checkAndApplyUnconscious(actor, user);
         },
       },
       dead: {
         icon: '<i class="fas fa-skull"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.dead`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyDead(actor, hpUpdate, user);
+          checkAndApplyDead(actor, user);
         },
       },
       cancel: {
