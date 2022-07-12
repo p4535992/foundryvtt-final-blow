@@ -36,6 +36,15 @@ export const registerSettings = function (): void {
     default: false,
   });
 
+  game.settings.register(CONSTANTS.MODULE_NAME, 'useIntegrationWithMMM', {
+    name: `${CONSTANTS.MODULE_NAME}.setting.useIntegrationWithMMM.name`,
+    hint: `${CONSTANTS.MODULE_NAME}.setting.useIntegrationWithMMM.hint`,
+    type: Boolean,
+    config: true,
+    scope: 'world',
+    default: false,
+  });
+
   // ========================================================================
 
   game.settings.register(CONSTANTS.MODULE_NAME, 'debug', {

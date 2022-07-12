@@ -6,6 +6,7 @@ import type { ChatMessageData } from '@league-of-foundry-developers/foundry-vtt-
 import CONSTANTS from '../constants';
 import { FinalBlowEffectDefinitions } from '../final-blow-effect-definitions';
 import { aemlApi } from '../module';
+import { finalBlowSocket } from '../socket';
 
 export async function getToken(documentUuid) {
   const document = await fromUuid(documentUuid);
@@ -367,23 +368,7 @@ function getElevationPlaceableObject(placeableObject: any): number {
 //   }
 // }
 
-// export async function checkAndApply(actor:Actor, hpUpdate:number, user) {
-//   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
-//   // return wrapped(update,options,user);
-//   // if (hpUpdate === undefined){
-//   //   return;
-//   // }
-//   //@ts-ignore
-//   const attributes = actor.data.data.attributes;
-
-//   const needsDead = hpUpdate === 0;
-//   if(needsDead){
-//     // checkAndApplyDead(actor, update, options, user);
-
-//   }
-// }
-
-export async function checkAndApplyWounded(actor: Actor, user: User) {
+export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -393,6 +378,10 @@ export async function checkAndApplyWounded(actor: Actor, user: User) {
     player: user.name,
   });
   generateCardsFromToken(token, actor, msg);
+
+  if(onlyChat){
+    return false;
+  }
 
   const effect = FinalBlowEffectDefinitions.wounded();
   const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
@@ -406,57 +395,22 @@ export async function checkAndApplyWounded(actor: Actor, user: User) {
     }
   }
 
-  if (game.modules.get('mmm')?.active) {
-    //@ts-ignore
-    MaxwelMaliciousMaladies.displayDialog();
+  if (game.settings.get(CONSTANTS.MODULE_NAME,'useIntegrationWithMMM') && game.modules.get('mmm')?.active) {
+    await finalBlowSocket.executeForAllGMs('renderDialogMMMForFinalBlow');
   }
-  // const hpUpdate = getProperty(update, "data.attributes.hp.value");
-  // return wrapped(update,options,user);
-  // if (hpUpdate === undefined){
-  //   return;
-  // }
-  /*
-  //@ts-ignore
-  const attributes = actor.data.data.attributes;
-  // if (configSettings.addWounded > 0) {
-    //@ts-ignore
-    const CEWounded = game.dfreds?.effects?._wounded
-    // const woundedLevel = attributes.hp.max * configSettings.addWounded / 100;
-    // const needsWounded = hpUpdate > 0 && hpUpdate < woundedLevel;
-    const needsWounded = true;
-    if (game.modules.get("dfreds-convenient-effects")?.active && CEWounded) {
-      const wounded = await this.convenientEffectsHasEffect(CEWounded.name, actor.uuid);
-      if (wounded !== needsWounded) {
-        //@ts-ignore
-        await game.dfreds?.effectInterface.toggleEffect(CEWounded.name, { overlay: false, uuids: [actor.uuid] });
-      }
-    } else {
-      const tokens = actor.getActiveTokens();
-      //@ts-ignore
-      const controlled = tokens.filter(t => t._controlled);
-      const token = controlled.length ? controlled.shift() : tokens.shift();
-      const bleeding = CONFIG.statusEffects.find(se => se.id === "bleeding");
-      if (bleeding && token) {
-        await token.toggleEffect(<string>bleeding.icon, { overlay: false, active: needsWounded });
-        if(needsWounded){
-          if (game.modules.get("mmm")?.active){
-            //@ts-ignore
-            MaxwelMaliciousMaladies.displayDialog();
-          }
-        }
-      }
-    }
-  // }
-  */
+  return true;
 }
-
-export async function checkAndApplyUnconscious(actor: Actor, user: User) {
+export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
   const msg = i18nFormat('final-blow.chat.messages.unconscious', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
+
+  if(onlyChat){
+    return false;
+  }
 
   const effect = FinalBlowEffectDefinitions.unconscious();
   const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
@@ -469,54 +423,20 @@ export async function checkAndApplyUnconscious(actor: Actor, user: User) {
       await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
     }
   }
-
-  // const hpUpdate = getProperty(update, "data.attributes.hp.value");
-  // return wrapped(update,options,user);
-  // if (hpUpdate === undefined){
-  //   return;
-  // }
-  /*
-  //@ts-ignore
-  const attributes = actor.data.data.attributes;
-  // if (configSettings.addDead) {
-    // const needsDead = hpUpdate === 0;
-    const needsUnconscious = true;
-    if (game.modules.get("dfreds-convenient-effects")?.active && game.settings.get("dfreds-convenient-effects", "modifyStatusEffects") !== "none") {
-      const effectName = this.getConvenientEffectsUnconscious().name;
-      const hasEffect = await this.convenientEffectsHasEffect(effectName, actor.uuid);
-      if ((needsUnconscious !== hasEffect)) {
-        if (!actor.hasPlayerOwner) { // For CE dnd5e does not treat dead as dead for the combat tracker so update it by hand as well
-          let combatant;
-          if (actor.token) combatant = game.combat?.getCombatantByToken(<string>actor.token.id);
-          //@ts-ignore
-          else combatant = game.combat?.getCombatantByActor(actor.id);
-          if (combatant) await combatant.update({ defeated: needsUnconscious })
-        }
-        //@ts-ignore
-        await game.dfreds?.effectInterface.toggleEffect(effectName, { overlay: true, uuids: [actor.uuid] });
-      }
-    }
-    else {
-      const tokens = actor.getActiveTokens();
-      //@ts-ignore
-      const controlled = tokens.filter(t => t._controlled);
-      const token = controlled.length ? controlled.shift() : tokens.shift();
-      if (token) {
-        await token.toggleEffect("/icons/svg/unconscious.svg", { overlay: true, active: needsUnconscious });
-      }
-    }
-  // }
-
-  */
+  return true;
 }
 
-export async function checkAndApplyDead(actor: Actor, user: User) {
+export async function checkAndApplyDead(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
   const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
   const msg = i18nFormat('final-blow.chat.messages.dead', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
+
+  if(onlyChat){
+    return false;
+  }
 
   const effect = FinalBlowEffectDefinitions.dead();
   const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
@@ -529,48 +449,7 @@ export async function checkAndApplyDead(actor: Actor, user: User) {
       await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
     }
   }
-
-  // const hpUpdate = getProperty(update, "data.attributes.hp.value");
-  // return wrapped(update,options,user);
-  // if (hpUpdate === undefined){
-  //   return;
-  // }
-  /*
-  //@ts-ignore
-  const attributes = actor.data.data.attributes;
-  // if (configSettings.addDead) {
-    // const needsDead = hpUpdate === 0;
-    const needsDead = true;
-    if (game.modules.get("dfreds-convenient-effects")?.active && game.settings.get("dfreds-convenient-effects", "modifyStatusEffects") !== "none") {
-      const effectName = actor.hasPlayerOwner ? this.getConvenientEffectsUnconscious().name : this.getConvenientEffectsDead().name;
-      const hasEffect = await this.convenientEffectsHasEffect(effectName, actor.uuid);
-      if ((needsDead !== hasEffect)) {
-        if (!actor.hasPlayerOwner) { // For CE dnd5e does not treat dead as dead for the combat tracker so update it by hand as well
-          let combatant;
-          if (actor.token) combatant = game.combat?.getCombatantByToken(<string>actor.token.id);
-          //@ts-ignore
-          else combatant = game.combat?.getCombatantByActor(actor.id);
-          if (combatant) await combatant.update({ defeated: needsDead })
-        }
-        //@ts-ignore
-        await game.dfreds?.effectInterface.toggleEffect(effectName, { overlay: true, uuids: [actor.uuid] });
-      }
-    }
-    else {
-      const tokens = actor.getActiveTokens();
-      //@ts-ignore
-      const controlled = tokens.filter(t => t._controlled);
-      const token = controlled.length ? controlled.shift() : tokens.shift();
-      if (token) {
-        if (actor.hasPlayerOwner) {
-          await token.toggleEffect("/icons/svg/unconscious.svg", { overlay: true, active: needsDead });
-        } else {
-          await token.toggleEffect(CONFIG.controlIcons.defeated, { overlay: true, active: needsDead });
-        }
-      }
-    }
-  // }
-  */
+  return true;
 }
 
 export async function convenientEffectsHasEffect(effectName: string, uuid: string) {
@@ -598,7 +477,21 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
   //   `modules/${CONSTANTS.MODULE_NAME}/templates/XXX.hbs`,
   //   data,
   // );
-  const template = 'This is a "FINAL BLOW", decide what to do...';
+  const template = `
+  <div class="form-group">
+    <label>This is a "FINAL BLOW", decide what to do...</label>
+  </div>
+  <div class="form-group">
+    <label>${i18n("final-blow.dialogs.onlychat.label")}</label>
+    <input
+      id="final-blow.onlychat"
+      type="checkbox"
+      value="false"
+      onclick="$(this).attr('value', this.checked ? true : false)"
+    />
+    <p class="notes">${i18n("final-blow.dialogs.onlychat.notes")}</p>
+  </div>
+  `;
   const d = new Dialog({
     title: i18n(`${CONSTANTS.MODULE_NAME}.dialog.decidethefinalblow`),
     content: template,
@@ -607,21 +500,24 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
         icon: '<i class="fas fa-tint"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.wounded`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyWounded(actor, user);
+          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          checkAndApplyWounded(actor, user, onlyChat);
         },
       },
       unconscious: {
         icon: '<i class="fas fa-dizzy"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.unconscious`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyUnconscious(actor, user);
+          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          checkAndApplyUnconscious(actor, user, onlyChat);
         },
       },
       dead: {
         icon: '<i class="fas fa-skull"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.dead`),
         callback: async (html: JQuery<HTMLElement>) => {
-          checkAndApplyDead(actor, user);
+          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          checkAndApplyDead(actor, user, onlyChat);
         },
       },
       cancel: {
