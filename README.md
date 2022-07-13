@@ -41,13 +41,21 @@ To install this module manually:
 4.  Click 'Install' and wait for installation to complete
 5.  Don't forget to enable the module in game using the "Manage Module" button
 
+### socketLib
+
+This module uses the [socketLib](https://github.com/manuelVo/foundryvtt-socketlib) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
+### active-effect-manager-lib
+
+This module uses the [active-effect-manager-lib](https://github.com/p4535992/foundryvtt-active-effect-manager-lib) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
 ## Known Issue\Limitation
 
+## Feature
 
-## Usage
+### Integration with [Maxwell's Manual of Malicious Maladies](https://github.com/theripper93/Maxwell-s-Manual-of-Malicious-Maladies)
 
-When any token reach the hp 0, a dialog popout asking for the final blow.
+If the module [Maxwell's Manual of Malicious Maladies](https://github.com/theripper93/Maxwell-s-Manual-of-Malicious-Maladies) is present and active it wwill be called for the wounded action.
 
 ## Api
 
@@ -62,7 +70,7 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 
 - Some icons are retrieve from the [Dnd5e system](https://gitlab.com/foundrynet/dnd5e) with [MIT](https://gitlab.com/foundrynet/dnd5e/-/blob/master/LICENSE.txt)
 - Some icons are retrieve from the [Pf2 system](https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/) with [GPLv2](https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/LICENSE)
-- Some setting and the chat template are acustomized version ot he one give from the module [Koboldworks Turn Announcer](https://gitlab.com/koboldworks/agnostic/turn-announcer/) with license [MIT](https://gitlab.com/koboldworks/agnostic/turn-announcer/-/blob/master/LICENSE)
+- Some setting and the chat template are a customized version of the one give from the module [Koboldworks Turn Announcer](https://gitlab.com/koboldworks/agnostic/turn-announcer/) with license [MIT](https://gitlab.com/koboldworks/agnostic/turn-announcer/-/blob/master/LICENSE)
 
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 

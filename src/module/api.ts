@@ -8,10 +8,10 @@ const API = {
     this.renderDialogMMMForFinalBlow();
   },
 
-  renderDialogMMMForFinalBlow(){
+  renderDialogMMMForFinalBlow() {
     //@ts-ignore
     MaxwelMaliciousMaladies.displayDialog();
-  }
+  },
 };
 
 export default API;

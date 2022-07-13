@@ -368,7 +368,7 @@ function getElevationPlaceableObject(placeableObject: any): number {
 //   }
 // }
 
-export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
+export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat: boolean): Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -379,7 +379,7 @@ export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat:bo
   });
   generateCardsFromToken(token, actor, msg);
 
-  if(onlyChat){
+  if (onlyChat) {
     return false;
   }
 
@@ -389,18 +389,18 @@ export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat:bo
     await aemlApi.addEffectOnToken(token.id, effect.name, effect);
   } else {
     if (activeEffect.data.disabled) {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
     } else {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
     }
   }
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME,'useIntegrationWithMMM') && game.modules.get('mmm')?.active) {
+  if (game.settings.get(CONSTANTS.MODULE_NAME, 'useIntegrationWithMMM') && game.modules.get('mmm')?.active) {
     await finalBlowSocket.executeForAllGMs('renderDialogMMMForFinalBlow');
   }
   return true;
 }
-export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
+export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyChat: boolean): Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -408,7 +408,7 @@ export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyCha
   const msg = i18nFormat('final-blow.chat.messages.unconscious', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
 
-  if(onlyChat){
+  if (onlyChat) {
     return false;
   }
 
@@ -418,15 +418,15 @@ export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyCha
     await aemlApi.addEffectOnToken(token.id, effect.name, effect);
   } else {
     if (activeEffect.data.disabled) {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
     } else {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
     }
   }
   return true;
 }
 
-export async function checkAndApplyDead(actor: Actor, user: User, onlyChat:boolean):Promise<boolean> {
+export async function checkAndApplyDead(actor: Actor, user: User, onlyChat: boolean): Promise<boolean> {
   const tokens = actor.getActiveTokens();
   //@ts-ignore
   const controlled = tokens.filter((t) => t._controlled);
@@ -434,7 +434,7 @@ export async function checkAndApplyDead(actor: Actor, user: User, onlyChat:boole
   const msg = i18nFormat('final-blow.chat.messages.dead', { token: token?.name });
   generateCardsFromToken(token, actor, msg);
 
-  if(onlyChat){
+  if (onlyChat) {
     return false;
   }
 
@@ -444,9 +444,9 @@ export async function checkAndApplyDead(actor: Actor, user: User, onlyChat:boole
     await aemlApi.addEffectOnToken(token.id, effect.name, effect);
   } else {
     if (activeEffect.data.disabled) {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
     } else {
-      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+      await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
     }
   }
   return true;
@@ -482,14 +482,14 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
     <label>This is a "FINAL BLOW", decide what to do...</label>
   </div>
   <div class="form-group">
-    <label>${i18n("final-blow.dialogs.onlychat.label")}</label>
+    <label>${i18n('final-blow.dialogs.onlychat.label')}</label>
     <input
-      id="final-blow.onlychat"
+      id="final-blow-onlychat"
       type="checkbox"
       value="false"
       onclick="$(this).attr('value', this.checked ? true : false)"
     />
-    <p class="notes">${i18n("final-blow.dialogs.onlychat.notes")}</p>
+    <p class="notes">${i18n('final-blow.dialogs.onlychat.notes')}</p>
   </div>
   `;
   const d = new Dialog({
@@ -500,7 +500,7 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
         icon: '<i class="fas fa-tint"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.wounded`),
         callback: async (html: JQuery<HTMLElement>) => {
-          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          const onlyChat = String(html.find('#final-blow-onlychat').val()) === 'true' ? true : false;
           checkAndApplyWounded(actor, user, onlyChat);
         },
       },
@@ -508,7 +508,7 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
         icon: '<i class="fas fa-dizzy"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.unconscious`),
         callback: async (html: JQuery<HTMLElement>) => {
-          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          const onlyChat = String(html.find('#final-blow-onlychat').val()) === 'true' ? true : false;
           checkAndApplyUnconscious(actor, user, onlyChat);
         },
       },
@@ -516,7 +516,7 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
         icon: '<i class="fas fa-skull"></i>',
         label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.dead`),
         callback: async (html: JQuery<HTMLElement>) => {
-          const onlyChat = String(html.find('#final-blow.onlychat').val())==='true' ? true : false;
+          const onlyChat = String(html.find('#final-blow-onlychat').val()) === 'true' ? true : false;
           checkAndApplyDead(actor, user, onlyChat);
         },
       },

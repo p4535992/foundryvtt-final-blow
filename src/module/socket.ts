@@ -13,9 +13,7 @@ export function registerSocket() {
   //@ts-ignore
   finalBlowSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
 
-  finalBlowSocket.register('renderDialogMMMForFinalBlow', (...args) =>
-    API.renderDialogMMMForFinalBlowArr(...args),
-  );
+  finalBlowSocket.register('renderDialogMMMForFinalBlow', (...args) => API.renderDialogMMMForFinalBlowArr(...args));
 
   setSocket(finalBlowSocket);
   return finalBlowSocket;
