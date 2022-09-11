@@ -24,7 +24,7 @@ export const readyHooks = async () => {
 	// libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Actor.documentClass.prototype._preUpdate", _preUpdateActor, "WRAPPER");
 
 	Hooks.on("preUpdateActor", async (actor, update, options, user) => {
-		const hpUpdate = <number>getProperty(update, "data.attributes.hp.value");
+		const hpUpdate = <number>getProperty(update, "system.attributes.hp.value");
 		if (hpUpdate === undefined) {
 			return;
 		}
@@ -46,7 +46,7 @@ export const readyHooks = async () => {
 
 // async function _preUpdateActor(wrapped, update, options, user) {
 //   try {
-//     const hpUpdate = <number>getProperty(update, "data.attributes.hp.value");
+//     const hpUpdate = <number>getProperty(update, "system.attributes.hp.value");
 //     // await checkAndApply(this, update, options, user);
 //     await zeroHPExpiry(this,  hpUpdate, user);
 //   } catch (err) {

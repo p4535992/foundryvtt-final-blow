@@ -34,10 +34,14 @@ export function getOwnedTokens(priorityToControlledIfGM: boolean): Token[] {
 			return arr;
 		}
 	}
-	let ownedTokens = <Token[]>canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.data.hidden || gm));
+	let ownedTokens = <Token[]>(
+		canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.document.hidden || gm))
+	);
 	if (ownedTokens.length === 0 || !canvas.tokens?.controlled[0]) {
 		ownedTokens = <Token[]>(
-			canvas.tokens?.placeables.filter((token) => (token.observer || token.isOwner) && (!token.data.hidden || gm))
+			canvas.tokens?.placeables.filter(
+				(token) => (token.observer || token.isOwner) && (!token.document.hidden || gm)
+			)
 		);
 	}
 	return ownedTokens;
@@ -87,7 +91,8 @@ export function getActiveGMs() {
 
 export function isResponsibleGM() {
 	if (!game.user?.isGM) return false;
-	return !getActiveGMs()?.some((other) => other.data._id < <string>game.user?.data._id);
+	//@ts-ignore
+	return !getActiveGMs()?.some((other) => other._id < <string>game.user?._id);
 }
 
 export function firstGM() {
@@ -101,7 +106,7 @@ export function isFirstGM() {
 export function firstOwner(doc): User | undefined {
 	/* null docs could mean an empty lookup, null docs are not owned by anyone */
 	if (!doc) return undefined;
-	const permissionObject = (doc instanceof TokenDocument ? doc.actor?.data.permission : doc.data.permission) ?? {};
+	const permissionObject = (doc instanceof TokenDocument ? doc.actor?.permission : doc.permission) ?? {};
 	const playerOwners = Object.entries(permissionObject)
 		.filter(([id, level]) => !game.users?.get(id)?.isGM && game.users?.get(id)?.active && level === 3)
 		.map(([id, level]) => id);
@@ -279,9 +284,9 @@ export function getFirstPlayerTokenSelected(): Token | null {
 		return null;
 	}
 	if (!selectedTokens || selectedTokens.length === 0) {
-		//if(game.user.character.data.token){
+		//if(game.user.character.token){
 		//  //@ts-ignore
-		//  return game.user.character.data.token;
+		//  return game.user.character.token;
 		//}else{
 		return null;
 		//}
@@ -308,7 +313,8 @@ export function getFirstPlayerToken(): Token | null {
 		if (!controlled.length || controlled.length === 0) {
 			// If no token is selected use the token of the users character
 			token = <Token>(
-				canvas.tokens?.placeables.find((token) => token.data._id === game.user?.character?.data?._id)
+				//@ts-ignore
+				canvas.tokens?.placeables.find((token) => token.document._id === game.user?.character?.data?._id)
 			);
 		}
 		// If no token is selected use the first owned token of the users character you found
@@ -355,13 +361,13 @@ function getElevationPlaceableObject(placeableObject: any): number {
 // =============================
 
 // export async function zeroHPExpiry(actor:Actor, hpUpdate:number, user) {
-//   // const hpUpdate = getProperty(update, "data.attributes.hp.value");
+//   // const hpUpdate = getProperty(update, "system.attributes.hp.value");
 //   // if (hpUpdate !== 0) return;
 //   const expiredEffects: string[] = [];
 //   for (const effect of actor.effects) {
 //     //@ts-ignore
-//     if (effect.data.flags?.dae?.specialDuration?.includes("zeroHP")) {
-//       expiredEffects.push(<string>effect.data._id);
+//     if (effect.flags?.dae?.specialDuration?.includes("zeroHP")) {
+//       expiredEffects.push(<string>effect._id);
 //     }
 //   }
 //   if (expiredEffects.length > 0){
@@ -390,7 +396,8 @@ export async function checkAndApplyWounded(actor: Actor, user: User, onlyChat: b
 	if (!activeEffect) {
 		await aemlApi.addEffectOnToken(token.id, effect.name, effect);
 	} else {
-		if (activeEffect.data.disabled) {
+		//@ts-ignore
+		if (activeEffect.disabled) {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
 		} else {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
@@ -419,7 +426,8 @@ export async function checkAndApplyUnconscious(actor: Actor, user: User, onlyCha
 	if (!activeEffect) {
 		await aemlApi.addEffectOnToken(token.id, effect.name, effect);
 	} else {
-		if (activeEffect.data.disabled) {
+		//@ts-ignore
+		if (activeEffect.disabled) {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
 		} else {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
@@ -445,7 +453,8 @@ export async function checkAndApplyDead(actor: Actor, user: User, onlyChat: bool
 	if (!activeEffect) {
 		await aemlApi.addEffectOnToken(token.id, effect.name, effect);
 	} else {
-		if (activeEffect.data.disabled) {
+		//@ts-ignore
+		if (activeEffect.disabled) {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, true, false);
 		} else {
 			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, true, false, true);
@@ -501,24 +510,33 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
 			wounded: {
 				icon: '<i class="fas fa-tint"></i>',
 				label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.wounded`),
-				callback: async (html: HTMLElement|JQuery<HTMLElement>) => {
-					const onlyChat = String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true" ? true : false;
+				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
+					const onlyChat =
+						String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true"
+							? true
+							: false;
 					checkAndApplyWounded(actor, user, onlyChat);
 				},
 			},
 			unconscious: {
 				icon: '<i class="fas fa-dizzy"></i>',
 				label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.unconscious`),
-				callback: async (html: HTMLElement|JQuery<HTMLElement>) => {
-					const onlyChat = String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true" ? true : false;
+				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
+					const onlyChat =
+						String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true"
+							? true
+							: false;
 					checkAndApplyUnconscious(actor, user, onlyChat);
 				},
 			},
 			dead: {
 				icon: '<i class="fas fa-skull"></i>',
 				label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.dead`),
-				callback: async (html: HTMLElement|JQuery<HTMLElement>) => {
-					const onlyChat = String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true" ? true : false;
+				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
+					const onlyChat =
+						String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true"
+							? true
+							: false;
 					checkAndApplyDead(actor, user, onlyChat);
 				},
 			},
@@ -527,7 +545,7 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
 				label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.cancel`),
 			},
 		},
-		render: (html: HTMLElement|JQuery<HTMLElement>) => {
+		render: (html: HTMLElement | JQuery<HTMLElement>) => {
 			//
 		},
 		default: "cancel",
@@ -536,7 +554,7 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
 }
 
 export async function generateCardsFromToken(token: Token, actor: Actor, messageChat: string) {
-	const data = {
+	const myData = {
 		actor: actor,
 		combatant: null,
 		combat: null,
@@ -557,7 +575,8 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 			return token.isOwner ?? false; // this.combatant?.visible ?? false;
 		},
 		obfuscated: false,
-		portrait: token.data.img, // token?.icon ?? token.data.img ?? token.actor?.data.token.img,
+		//@ts-ignore
+		portrait: token?.document.texture?.src,
 		hidePortrait: false,
 		msg: messageChat,
 		allowProtoMethodsByDefault: true,
@@ -565,36 +584,37 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 	};
 
 	const obfuscateType = <string>game.settings.get(CONSTANTS.MODULE_NAME, "obfuscateNPCs");
-	const hasVisibleName = () => (data.token ? [30, 50].includes(data.token.data.displayName) : true); // 30=hovered by anyone or 50=always for everyone
+	//@ts-ignore
+	const hasVisibleName = () => (myData.token ? [30, 50].includes(myData.token.document.displayName) : true); // 30=hovered by anyone or 50=always for everyone
 	const obfuscate = {
 		get all() {
 			return false;
 		},
 		get owned() {
-			return !data.actor?.hasPlayerOwner;
+			return !myData.actor?.hasPlayerOwner;
 		},
 		get token() {
 			return !hasVisibleName();
 		},
 		get any() {
-			return !(data.actor?.hasPlayerOwner || hasVisibleName());
+			return !(myData.actor?.hasPlayerOwner || hasVisibleName());
 		},
 	};
-	data.obfuscated = obfuscate[obfuscateType] ?? false;
-	if (data.obfuscated) {
-		data.name = i18n("final-blow.chat.messages.unidentifiedblow");
+	myData.obfuscated = obfuscate[obfuscateType] ?? false;
+	if (myData.obfuscated) {
+		myData.name = i18n("final-blow.chat.messages.unidentifiedblow");
 	}
-	data.label = i18nFormat("final-blow.chat.messages.blow", {
-		// name: `<span class='name'>${data.name}</span>`,
-		name: data.name,
-		player: data.player,
+	myData.label = i18nFormat("final-blow.chat.messages.blow", {
+		// name: `<span class='name'>${myData.name}</span>`,
+		name: myData.name,
+		player: myData.player,
 	});
 
-	if (!data.portrait || game.settings.get(CONSTANTS.MODULE_NAME, "hidePortrait")) {
-		data.hidePortrait = true;
+	if (!myData.portrait || game.settings.get(CONSTANTS.MODULE_NAME, "hidePortrait")) {
+		myData.hidePortrait = true;
 	}
 
-	// const defeated = data.combatant.data.defeated;
+	// const defeated = myData.combatant.defeated;
 	// const msgs:ChatMessageData[] = [];
 	// if (game.settings.get(CFG.module, CFG.SETTING.missedKey)) {
 	// 	const msg = missedTurn(data, context);
@@ -602,27 +622,27 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 	// }
 
 	// if (defeated) return msgs; // undesired
-	// if (data.last?.combatant != null && data.last.combatant.id === data.combatant.id) return msgs; // don't report the same thing multiple times
+	// if (myData.last?.combatant != null && .last.combatant.id === myData.combatant.id) return msgs; // don't report the same thing multiple times
 
 	const getUsers = (thing, permission) =>
-		Object.entries(thing.data.permission)
+		Object.entries(thing.permission)
 			.filter((u) => <User>u[1] >= permission)
 			.map((u) => u[0]);
 
-	const speaker = data.obfuscated
+	const speaker = myData.obfuscated
 		? { user: game.user?.id }
 		: ChatMessage.getSpeaker({
-				token: data.token?.document,
-				actor: <Actor>data.actor,
-		  });
+				token: myData.token?.document,
+				actor: <Actor>myData.actor,
+		});
 
 	const msgData = {
 		content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {
-			data: data,
+			injectData: myData,
 		}),
 		speaker: speaker,
-		rollMode: !data.hidden ? "publicroll" : "gmroll",
-		whisper: !data.hidden ? [] : getUsers(data.actor, CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER),
+		rollMode: !myData.hidden ? "publicroll" : "gmroll",
+		whisper: !myData.hidden ? [] : getUsers(myData.actor, CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER),
 		flags: {
 			[CONSTANTS.MODULE_NAME]: {
 				enabled: true,

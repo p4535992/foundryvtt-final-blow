@@ -102,13 +102,13 @@ class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object
 
 async function applyDefaultSettings() {
 	const settings = defaultSettings(true);
-	// for (const [name, data] of Object.entries(settings)) {
-	//   await game.settings.set(CONSTANTS.MODULE_NAME, name, data.default);
+	// for (const [name, settingData] of Object.entries(settings)) {
+	//   await game.settings.set(CONSTANTS.MODULE_NAME, name, settingData.default);
 	// }
 	const settings2 = otherSettings(true);
-	for (const [name, data] of Object.entries(settings2)) {
+	for (const [name, settingData] of Object.entries(settings2)) {
 		//@ts-ignore
-		await game.settings.set(CONSTANTS.MODULE_NAME, name, data.default);
+		await game.settings.set(CONSTANTS.MODULE_NAME, name, settingData.default);
 	}
 }
 

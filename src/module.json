@@ -74,11 +74,11 @@
 			"type": "module"
 		},
 		{
-			"name": "warpgate",
+			"name": "socketlib",
 			"type": "module"
 		},
 		{
-			"name": "socketlib",
+			"name": "lib-wrapper",
 			"type": "module"
 		}
 	],

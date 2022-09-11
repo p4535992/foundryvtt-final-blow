@@ -1,6 +1,8 @@
 import type { ActiveEffectData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
+import type { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
+import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
+import type { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
 import type Effect from "./effect";
-import type { EffectInterfaceApi } from "./effect-interface-api";
 
 export interface ActiveEffectManagerLibApi {
 	effectInterface: EffectInterfaceApi;
@@ -244,5 +246,302 @@ export interface ActiveEffectManagerLibApi {
 		forceDisabled?: boolean,
 		isTemporary?: boolean,
 		isDisabled?: boolean
+	): Promise<Item | ActiveEffect | boolean | undefined>;
+
+	// ======================
+	// SUPPORT 2022-09-11
+	// ======================
+
+	buildDefault(
+		id: string,
+		name: string,
+		icon: string,
+		isPassive: boolean,
+		changes: EffectChangeData[],
+		atlChanges: EffectChangeData[],
+		tokenMagicChanges: EffectChangeData[],
+		atcvChanges: EffectChangeData[]
+	): Promise<Effect>;
+
+	isDuplicateEffectChange(aeKey: string, arrChanges: EffectChangeData[]): Promise<boolean>;
+
+	_handleIntegrations(effect: Effect): Promise<EffectChangeData[]>;
+
+	convertActiveEffectToEffect(effect: ActiveEffect): Promise<Effect>;
+
+	convertActiveEffectDataPropertiesToActiveEffect(
+		p: PropertiesToSource<ActiveEffectDataProperties>,
+		isPassive: boolean
+	): Promise<ActiveEffect>;
+
+	convertToActiveEffectData(effect: Effect): Promise<Record<string, unknown>>;
+
+	retrieveChangesOrderedByPriorityFromAE(effectEntity: ActiveEffect): Promise<EffectChangeData[]>;
+
+	prepareOriginForToken(tokenOrTokenId: Token | string): Promise<string>;
+
+	prepareOriginForActor(actorOrActorId: Actor | string): Promise<string>;
+
+	convertToATLEffect(
+		//lockRotation: boolean,
+		dimSight: number,
+		brightSight: number,
+		sightAngle: number,
+		dimLight: number,
+		brightLight: number,
+		lightColor: string,
+		lightAlpha: number,
+		lightAngle: number,
+
+		lightColoration: number | null,
+		lightLuminosity: number | null,
+		lightGradual: boolean | null,
+		lightSaturation: number | null,
+		lightContrast: number | null,
+		lightShadows: number | null,
+
+		lightAnimationType: string | null,
+		lightAnimationSpeed: number | null,
+		lightAnimationIntensity: number | null,
+		lightAnimationReverse: boolean | null,
+
+		// applyAsAtlEffect, // rimosso
+		effectName: string | null,
+		effectIcon: string | null,
+		duration: number | null,
+
+		// vision = false,
+		// id: string | null,
+		// name: string | null,
+		height: number | null,
+		width: number | null,
+		scale: number | null
+	): Promise<Effect>;
+}
+
+interface EffectInterfaceApi {
+	initialize(moduleName: string): void;
+
+	toggleEffect(
+		effectName: string,
+		overlay: boolean,
+		uuids: string[],
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	hasEffectApplied(effectName: string, uuid: string, withSocket?: boolean): boolean;
+
+	removeEffect(effectName: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	addEffect(
+		effectName: string,
+		effectData: Effect,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		metadata: any,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	addEffectWith(
+		effectData: Effect,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		metadata: any,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	// ============================================================
+	// Additional feature for retrocompatibility
+	// ============================================================
+
+	// ====================================================================
+	// ACTOR MANAGEMENT
+	// ====================================================================
+
+	hasEffectAppliedOnActor(effectName: string, uuid: string, includeDisabled: boolean, withSocket?: boolean): boolean;
+
+	hasEffectAppliedFromIdOnActor(
+		effectId: string,
+		uuid: string,
+		includeDisabled: boolean,
+		withSocket?: boolean
+	): boolean;
+
+	removeEffectOnActor(effectName: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	removeEffectFromIdOnActor(effectId: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	addEffectOnActor(
+		effectName: string,
+		uuid: string,
+		effect: Effect,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	toggleEffectFromIdOnActor(
+		effectId: string,
+		uuid: string,
+		alwaysDelete: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	addActiveEffectOnActor(
+		uuid: string,
+		activeEffectData: ActiveEffectData,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	findEffectByNameOnActor(effectName: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	// ====================================================================
+	// TOKEN MANAGEMENT
+	// ====================================================================
+
+	hasEffectAppliedOnToken(effectName: string, uuid: string, includeDisabled: boolean, withSocket?: boolean): boolean;
+
+	hasEffectAppliedFromIdOnToken(
+		effectId: string,
+		uuid: string,
+		includeDisabled: boolean,
+		withSocket?: boolean
+	): boolean;
+
+	removeEffectOnToken(effectName: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	removeEffectFromIdOnToken(effectId: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	removeEffectFromIdOnTokenMultiple(
+		effectIds: string[],
+		uuid: string,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	addEffectOnToken(
+		effectName: string,
+		uuid: string,
+		effect: Effect,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	toggleEffectFromIdOnToken(
+		effectId: string,
+		uuid: string,
+		alwaysDelete: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	toggleEffectFromDataOnToken(
+		effect: Effect,
+		uuid: string,
+		alwaysDelete: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	addActiveEffectOnToken(
+		uuid: string,
+		activeEffectData: ActiveEffectData,
+		withSocket?: boolean
+	): Promise<ActiveEffect | undefined>;
+
+	findEffectByNameOnToken(effectName: string, uuid: string, withSocket?: boolean): Promise<ActiveEffect | undefined>;
+
+	updateEffectFromIdOnToken(
+		effectId: string,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		effectUpdated: Effect,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	updateEffectFromNameOnToken(
+		effectName: string,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		effectUpdated: Effect,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	updateActiveEffectFromIdOnToken(
+		effectId: string,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		effectUpdated: ActiveEffectData,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	updateActiveEffectFromNameOnToken(
+		effectName: string,
+		uuid: string,
+		origin: string,
+		overlay: boolean,
+		effectUpdated: ActiveEffectData,
+		withSocket?: boolean
+	): Promise<boolean | undefined>;
+
+	// ==================================================================
+
+	onManageActiveEffectFromEffectId(
+		effectActions: {
+			create: "create";
+			edit: "edit";
+			delete: "delete";
+			toogle: "toggle";
+			update: "update";
+		},
+		owner: Actor | Item,
+		effectId: string,
+		alwaysDelete?: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		isTemporary?: boolean,
+		isDisabled?: boolean,
+		withSocket?: boolean
+	): Promise<Item | ActiveEffect | boolean | undefined>;
+
+	onManageActiveEffectFromEffect(
+		effectActions: {
+			create: "create";
+			edit: "edit";
+			delete: "delete";
+			toogle: "toggle";
+			update: "update";
+		},
+		owner: Actor | Item,
+		effect: Effect,
+		alwaysDelete?: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		isTemporary?: boolean,
+		isDisabled?: boolean,
+		withSocket?: boolean
+	): Promise<Item | ActiveEffect | boolean | undefined>;
+
+	onManageActiveEffectFromActiveEffect(
+		effectActions: {
+			create: "create";
+			edit: "edit";
+			delete: "delete";
+			toogle: "toggle";
+			update: "update";
+		},
+		owner: Actor | Item,
+		activeEffect: ActiveEffect | null | undefined,
+		alwaysDelete?: boolean,
+		forceEnabled?: boolean,
+		forceDisabled?: boolean,
+		isTemporary?: boolean,
+		isDisabled?: boolean,
+		withSocket?: boolean
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 }
