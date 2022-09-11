@@ -12,56 +12,56 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { registerSettings } from './module/settings.js';
-import { initHooks, readyHooks, setupHooks } from './module/module';
-import type { ItemData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs.js';
-import { error, i18n, warn } from './module/lib/lib.js';
-import CONSTANTS from './module/constants.js';
-import type API from './module/api.js';
+import { registerSettings } from "./module/settings.js";
+import { initHooks, readyHooks, setupHooks } from "./module/module";
+import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs.js";
+import { error, i18n, warn } from "./module/lib/lib.js";
+import CONSTANTS from "./module/constants.js";
+import type API from "./module/api.js";
 
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
-Hooks.once('init', async () => {
-  console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+Hooks.once("init", async () => {
+	console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
 
-  // Register custom module settings
-  registerSettings();
-  initHooks();
+	// Register custom module settings
+	registerSettings();
+	initHooks();
 
-  // Preload Handlebars templates
-  //await preloadTemplates();
+	// Preload Handlebars templates
+	//await preloadTemplates();
 });
 
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
-Hooks.once('setup', function () {
-  // Do anything after initialization but before ready
-  setupHooks();
+Hooks.once("setup", function () {
+	// Do anything after initialization but before ready
+	setupHooks();
 });
 
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
-Hooks.once('ready', async () => {
-  // Do anything once the module is ready
-  // if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
-  //   let word = 'install and activate';
-  //   if (game.modules.get('lib-wrapper')) word = 'activate';
-  //   throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
-  // }
-  // if (!game.modules.get('socketLib')?.active && game.user?.isGM) {
-  //   let word = 'install and activate';
-  //   if (game.modules.get('socketLib')) word = 'activate';
-  //   throw error(`Requires the 'socketLib' module. Please ${word} it.`);
-  // }
-  if (!game.modules.get('active-effect-manager-lib')?.active && game.user?.isGM) {
-    let word = 'install and activate';
-    if (game.modules.get('active-effect-manager-lib')) word = 'activate';
-    throw error(`Requires the 'active-effect-manager-lib' module. Please ${word} it.`);
-  }
-  readyHooks();
+Hooks.once("ready", async () => {
+	// Do anything once the module is ready
+	// if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
+	//   let word = 'install and activate';
+	//   if (game.modules.get('lib-wrapper')) word = 'activate';
+	//   throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
+	// }
+	// if (!game.modules.get('socketLib')?.active && game.user?.isGM) {
+	//   let word = 'install and activate';
+	//   if (game.modules.get('socketLib')) word = 'activate';
+	//   throw error(`Requires the 'socketLib' module. Please ${word} it.`);
+	// }
+	if (!game.modules.get("active-effect-manager-lib")?.active && game.user?.isGM) {
+		let word = "install and activate";
+		if (game.modules.get("active-effect-manager-lib")) word = "activate";
+		throw error(`Requires the 'active-effect-manager-lib' module. Please ${word} it.`);
+	}
+	readyHooks();
 });
 
 /* ------------------------------------ */
@@ -69,8 +69,8 @@ Hooks.once('ready', async () => {
 /* ------------------------------------ */
 
 export interface FinalBlowModuleData {
-  api: typeof API;
-  socket: any;
+	api: typeof API;
+	socket: any;
 }
 
 /**
@@ -78,8 +78,8 @@ export interface FinalBlowModuleData {
  * @param api to set to game module.
  */
 export function setApi(api: typeof API): void {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
-  data.api = api;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
+	data.api = api;
 }
 
 /**
@@ -87,8 +87,8 @@ export function setApi(api: typeof API): void {
  * @returns Api from games module.
  */
 export function getApi(): typeof API {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
-  return data.api;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
+	return data.api;
 }
 
 /**
@@ -96,8 +96,8 @@ export function getApi(): typeof API {
  * @param socket to set to game module.
  */
 export function setSocket(socket: any): void {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
-  data.socket = socket;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
+	data.socket = socket;
 }
 
 /*
@@ -105,6 +105,6 @@ export function setSocket(socket: any): void {
  * @returns Socket from games module.
  */
 export function getSocket() {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
-  return data.socket;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as FinalBlowModuleData;
+	return data.socket;
 }
