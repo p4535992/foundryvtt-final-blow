@@ -463,6 +463,33 @@ export async function checkAndApplyDead(actor: Actor, user: User, onlyChat: bool
 	return true;
 }
 
+export async function checkAndApplySpecialDead(actor: Actor, user: User, onlyChat: boolean): Promise<boolean> {
+	const tokens = actor.getActiveTokens();
+	//@ts-ignore
+	const controlled = tokens.filter((t) => t._controlled);
+	const token = controlled.length ? <Token>controlled.shift() : <Token>tokens.shift();
+	const msg = i18nFormat("final-blow.chat.messages.specialdead", { token: token?.name });
+	generateCardsFromToken(token, actor, msg);
+
+	if (onlyChat) {
+		return false;
+	}
+
+	const effect = FinalBlowEffectDefinitions.specialdead();
+	const activeEffect = await aemlApi.findEffectByNameOnToken(token.id, effect.name);
+	if (!activeEffect) {
+		await aemlApi.addEffectOnToken(token.id, effect.name, effect);
+	} else {
+		//@ts-ignore
+		if (activeEffect.disabled) {
+			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, true, false);
+		} else {
+			await aemlApi.toggleEffectFromIdOnToken(token.id, <string>activeEffect.id, false, false, true);
+		}
+	}
+	return true;
+}
+
 export async function convenientEffectsHasEffect(effectName: string, uuid: string) {
 	//@ts-ignore
 	return game.dfreds.effectInterface.hasEffectApplied(effectName, uuid);
@@ -538,6 +565,17 @@ export async function renderDialogFinalBlow(actor: Actor, hpUpdate: number, user
 							? true
 							: false;
 					checkAndApplyDead(actor, user, onlyChat);
+				},
+			},
+			specialdead: {
+				icon: '<i class="fas fa-skull-crossbones"></i>',
+				label: i18n(`${CONSTANTS.MODULE_NAME}.dialog.specialdead`),
+				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
+					const onlyChat =
+						String((<JQuery<HTMLElement>>html).find("#final-blow-onlychat").val()) === "true"
+							? true
+							: false;
+					checkAndApplySpecialDead(actor, user, onlyChat);
 				},
 			},
 			cancel: {

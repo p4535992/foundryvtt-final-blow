@@ -4,11 +4,13 @@
 	"final-blow.dialog.wounded": "Hurt him",
 	"final-blow.dialog.unconscious": "Make him unconscious",
 	"final-blow.dialog.dead": "Kill him!",
+	"final-blow.dialog.specialdead": "Special dead",
 	"final-blow.dialog.cancel": "Do nothing",
 
 	"final-blow.chat.messages.wounded": "'{token}' is been wounded!",
 	"final-blow.chat.messages.unconscious": "'{token}' is made unconscious!",
 	"final-blow.chat.messages.dead": "'{token}' is been killed!",
+	"final-blow.chat.messages.specialdead": "'{token}' is been killed with something special!",
 
 	"final-blow.chat.messages.blow": "Final blow on '{name}'!",
 	"final-blow.chat.messages.unidentifiedblow": "???",
@@ -27,5 +29,12 @@
 
 	"final-blow.dialogs.content": "This is a \"FINAL BLOW\", decide what to do...",
 	"final-blow.dialogs.onlychat.label": "Apply only the chat ?",
-	"final-blow.dialogs.onlychat.notes": "If checked it will apply only the chat and no active effect on the token"
+	"final-blow.dialogs.onlychat.notes": "If checked it will apply only the chat and no active effect on the token",
+	
+	"final-blow.setting.reset.name": "Reset settings to default",
+	"final-blow.setting.reset.label": "Reset Settings To Default",
+	"final-blow.setting.reset.hint": "This will reset all of the settings of back to the active game system's default.",
+	"final-blow.setting.debug.name": "Enable debugging",
+	"final-blow.setting.debug.label": "Prints debug messages to the console",
+	"final-blow.setting.debug.hint": " "
 }

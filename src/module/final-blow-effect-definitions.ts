@@ -28,6 +28,10 @@ export class FinalBlowEffectDefinitions {
 		if (dead) {
 			effects.push(dead);
 		}
+		const specialdead = FinalBlowEffectDefinitions.specialdead(overlay);
+		if (specialdead) {
+			effects.push(specialdead);
+		}
 		return effects;
 	}
 
@@ -78,5 +82,21 @@ export class FinalBlowEffectDefinitions {
 				overlay: overlay,
 			});
 		}
+	}
+
+	static specialdead(overlay = true) {
+		// if (game.modules.get("dfreds-convenient-effects")?.active) {
+		// 	return getConvenientEffectsDead();
+		// } else {
+			return new Effect({
+				customId: "specialdeadblow",
+				name: "Special Dead Blow",
+				description: "No active effects",
+				icon: `modules/${CONSTANTS.MODULE_NAME}/icons/red-skull-blow.png`,
+				changes: [],
+				isTemporary: true,
+				overlay: overlay,
+			});
+		// }
 	}
 }

@@ -1,4 +1,4 @@
-import type { ActiveEffectData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
+import type { ActiveEffectData, UserData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import type { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
@@ -106,9 +106,10 @@ export interface ActiveEffectManagerLibApi {
 	toggleEffectFromIdOnActor(
 		actorId: string,
 		effectId: string,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined
 	): Promise<boolean | undefined>;
 
 	addActiveEffectOnActor(actorId: string, activeEffectData: ActiveEffectData): Promise<ActiveEffect | undefined>;
@@ -140,17 +141,19 @@ export interface ActiveEffectManagerLibApi {
 	toggleEffectFromIdOnToken(
 		tokenId: string,
 		effectId: string,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined
 	): Promise<boolean | undefined>;
 
 	toggleEffectFromDataOnToken(
 		tokenId: string,
 		effect: Effect,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined
 	): Promise<boolean | undefined>;
 
 	addActiveEffectOnToken(tokenId: string, activeEffectData: ActiveEffectData): Promise<ActiveEffect | undefined>;
@@ -207,10 +210,10 @@ export interface ActiveEffectManagerLibApi {
 		},
 		owner: Actor | Item,
 		effectId: string,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
 		isDisabled?: boolean
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
@@ -224,11 +227,11 @@ export interface ActiveEffectManagerLibApi {
 		},
 		owner: Actor | Item,
 		effect: Effect,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
-		isDisabled?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
+		isDisabled?: boolean|undefined
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromActiveEffect(
@@ -241,11 +244,11 @@ export interface ActiveEffectManagerLibApi {
 		},
 		owner: Actor | Item,
 		activeEffect: ActiveEffect | null | undefined,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
-		isDisabled?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
+		isDisabled?: boolean|undefined
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	// ======================
@@ -383,9 +386,10 @@ interface EffectInterfaceApi {
 	toggleEffectFromIdOnActor(
 		effectId: string,
 		uuid: string,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined,
 		withSocket?: boolean
 	): Promise<boolean | undefined>;
 
@@ -430,18 +434,20 @@ interface EffectInterfaceApi {
 	toggleEffectFromIdOnToken(
 		effectId: string,
 		uuid: string,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined,
 		withSocket?: boolean
 	): Promise<boolean | undefined>;
 
 	toggleEffectFromDataOnToken(
 		effect: Effect,
 		uuid: string,
-		alwaysDelete: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		overlay?:boolean|undefined,
 		withSocket?: boolean
 	): Promise<boolean | undefined>;
 
@@ -501,12 +507,12 @@ interface EffectInterfaceApi {
 		},
 		owner: Actor | Item,
 		effectId: string,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
-		isDisabled?: boolean,
-		withSocket?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
+		isDisabled?: boolean|undefined,
+		withSocket?: boolean|undefined
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromEffect(
@@ -519,12 +525,12 @@ interface EffectInterfaceApi {
 		},
 		owner: Actor | Item,
 		effect: Effect,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
-		isDisabled?: boolean,
-		withSocket?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
+		isDisabled?: boolean|undefined,
+		withSocket?: boolean|undefined
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromActiveEffect(
@@ -537,11 +543,11 @@ interface EffectInterfaceApi {
 		},
 		owner: Actor | Item,
 		activeEffect: ActiveEffect | null | undefined,
-		alwaysDelete?: boolean,
-		forceEnabled?: boolean,
-		forceDisabled?: boolean,
-		isTemporary?: boolean,
-		isDisabled?: boolean,
-		withSocket?: boolean
+		alwaysDelete?: boolean|undefined,
+		forceEnabled?: boolean|undefined,
+		forceDisabled?: boolean|undefined,
+		isTemporary?: boolean|undefined,
+		isDisabled?: boolean|undefined,
+		withSocket?: boolean|undefined
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 }
