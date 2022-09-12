@@ -312,10 +312,9 @@ export function getFirstPlayerToken(): Token | null {
 	if (!token) {
 		if (!controlled.length || controlled.length === 0) {
 			// If no token is selected use the token of the users character
-			token = <Token>(
-				//@ts-ignore
-				canvas.tokens?.placeables.find((token) => token.document._id === game.user?.character?.data?._id)
-			);
+			token = <
+				Token //@ts-ignore
+			>canvas.tokens?.placeables.find((token) => token.document._id === game.user?.character?.data?._id);
 		}
 		// If no token is selected use the first owned token of the users character you found
 		if (!token) {
@@ -672,7 +671,7 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 		: ChatMessage.getSpeaker({
 				token: myData.token?.document,
 				actor: <Actor>myData.actor,
-		});
+		  });
 
 	const msgData = {
 		content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {

@@ -30,7 +30,7 @@
 	"final-blow.dialogs.content": "This is a \"FINAL BLOW\", decide what to do...",
 	"final-blow.dialogs.onlychat.label": "Apply only the chat ?",
 	"final-blow.dialogs.onlychat.notes": "If checked it will apply only the chat and no active effect on the token",
-	
+
 	"final-blow.setting.reset.name": "Reset settings to default",
 	"final-blow.setting.reset.label": "Reset Settings To Default",
 	"final-blow.setting.reset.hint": "This will reset all of the settings of back to the active game system's default.",
