@@ -1,4 +1,4 @@
-### 1.0.5-6
+### 1.0.5-6-7
 
 - Fvtt 10 Initial Release
 

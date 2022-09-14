@@ -12,12 +12,11 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { registerSettings } from "./module/settings.js";
-import { initHooks, readyHooks, setupHooks } from "./module/module";
-import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs.js";
-import { error, i18n, warn } from "./module/lib/lib.js";
-import CONSTANTS from "./module/constants.js";
-import type API from "./module/api.js";
+import { registerSettings } from "./scripts/settings.js";
+import { initHooks, readyHooks, setupHooks } from "./scripts/module";
+import { error, i18n, warn } from "./scripts/lib/lib.js";
+import CONSTANTS from "./scripts/constants.js";
+import type API from "./scripts/api.js";
 
 /* ------------------------------------ */
 /* Initialize module					*/
