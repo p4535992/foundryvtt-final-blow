@@ -1,8 +1,8 @@
 {
-	"name": "final-blow",
+	"id": "final-blow",
 	"title": "Final Blow",
 	"description": "",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"authors": [
 		{
 			"name": "p4535992",
@@ -21,6 +21,7 @@
 	"includes": [
 		"./assets/**",
 		"./lang/**",
+		"./languages/**",
 		"./scripts/**",
 		"./styles/**",
 		"./templates/**",
@@ -47,7 +48,7 @@
 		{
 			"lang": "en",
 			"name": "English",
-			"path": "lang/en.json"
+			"path": "languages/en.json"
 		}
 	],
 	"packs": [],
@@ -64,26 +65,32 @@
 	"url": "https://github.com/p4535992/foundryvtt-final-blow",
 	"manifest": "https://github.com/p4535992/foundryvtt-final-blow/releases/latest/download/module.json",
 	"download": "https://github.com/p4535992/foundryvtt-final-blow/releases/latest/download/module.zip",
-	"readme": "https://github.com/p4535992/foundryvtt-final-blow/blob/v1.0.7/README.md",
-	"changelog": "https://github.com/p4535992/foundryvtt-final-blow/blob/v1.0.7/CHANGELOG.md",
+	"readme": "https://github.com/p4535992/foundryvtt-final-blow/blob/v1.0.8/README.md",
+	"changelog": "https://github.com/p4535992/foundryvtt-final-blow/blob/v1.0.8/CHANGELOG.md",
 	"bugs": "https://github.com/p4535992/foundryvtt-final-blow/issues",
 	"allowBugReporter": true,
-	"dependencies": [
-		{
-			"name": "active-effect-manager-lib",
-			"type": "module"
-		},
-		{
-			"name": "socketlib",
-			"type": "module"
-		},
-		{
-			"name": "lib-wrapper",
-			"type": "module"
-		}
-	],
-	"flags": {
-		"manifestPlusVersion": "1.2.0",
-		"allowBugReporter": true
+	"relationships": {
+		"systems": [],
+		"requires": [
+			{
+				"name": "active-effect-manager-lib",
+				"type": "module",
+				"manifest": "https://github.com/p4535992/foundryvtt-active-effect-manager-lib/releases/latest/download/module.json",
+				"compatibility": {}
+			},
+			{
+				"id": "lib-wrapper",
+				"type": "module",
+				"manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+				"compatibility": {}
+			},
+			{
+				"id": "socketlib",
+				"type": "module",
+				"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/develop/module.json",
+				"compatibility": {}
+			}
+		],
+		"conflicts": []
 	}
 }
