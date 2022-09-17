@@ -12,6 +12,8 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/p4535992/foundryvtt-final-blow/total?style=for-the-badge)
 
+[![Translation status](https://weblate.foundryvtt-hub.com/widgets/final-blow/-/287x66-black.png)](https://weblate.foundryvtt-hub.com/engage/final-blow/)
+
 ### If you want to buy me a coffee [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/p4535992)
 
 This module is given the possibility during the final blow to the enemy (the one that brings him to 0hp), to show a dialog box where the player is asked if the blow is lethal or not. So we give the choice to decide whether to apply the state of "Unconscious "or" Death " token by token.
