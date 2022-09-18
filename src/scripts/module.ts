@@ -6,19 +6,19 @@ import { warn, error, debug, i18nFormat, renderDialogFinalBlow } from "./lib/lib
 export let aemlApi: ActiveEffectManagerLibApi;
 
 export const initHooks = () => {
-	warn("Init Hooks processing");
+	// warn("Init Hooks processing");
 	// setup all the hooks
 };
 
 export const setupHooks = () => {
-	warn("Setup Hooks processing");
+	// warn("Setup Hooks processing");
 	//@ts-ignore
 	aemlApi = <ActiveEffectManagerLibApi>game.modules.get("active-effect-manager-lib").api;
 	aemlApi.effectInterface.initialize(CONSTANTS.MODULE_NAME);
 };
 
 export const readyHooks = async () => {
-	warn("Ready Hooks processing");
+	// warn("Ready Hooks processing");
 
 	//@ts-ignore
 	// libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Actor.documentClass.prototype._preUpdate", _preUpdateActor, "WRAPPER");

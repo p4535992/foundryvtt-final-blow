@@ -94,7 +94,7 @@ export interface ActiveEffectManagerLibApi {
 		actorId: string,
 		effectName: string,
 		effect: Effect
-	): Promise<Item | ActiveEffect | boolean | undefined>;
+	): Promise<ActiveEffect | undefined>;
 
 	findEffectByNameOnActor(actorId: string, effectName: string): Promise<ActiveEffect | undefined>;
 

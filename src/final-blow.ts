@@ -22,7 +22,7 @@ import type API from "./scripts/api.js";
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once("init", async () => {
-	console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+	// console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
 
 	// Register custom module settings
 	registerSettings();
