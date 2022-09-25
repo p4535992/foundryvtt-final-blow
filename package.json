@@ -2,7 +2,7 @@
   "name": "final-blow",
   "title": "Final Blow",
   "description": "",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "final-blow.js",
   "scripts": {
     "publish": "gulp publish --update",
