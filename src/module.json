@@ -49,13 +49,22 @@
 			"lang": "en",
 			"name": "English",
 			"path": "languages/en.json"
+		},
+		{
+			"lang": "fr",
+			"name": "Français",
+			"path": "languages/fr.json"
 		}
 	],
 	"packs": [],
 	"systems": [],
 	"scripts": [],
-	"esmodules": ["final-blow.js"],
-	"styles": ["styles/final-blow.css"],
+	"esmodules": [
+		"final-blow.js"
+	],
+	"styles": [
+		"styles/final-blow.css"
+	],
 	"compatibility": {
 		"minimum": 10,
 		"verified": 10,
