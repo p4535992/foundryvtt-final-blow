@@ -67,6 +67,10 @@ Hooks.once("ready", async () => {
 /* Other Hooks							*/
 /* ------------------------------------ */
 
+Hooks.once("devModeReady", ({ registerPackageDebugFlag }) => {
+	registerPackageDebugFlag(CONSTANTS.MODULE_NAME);
+});
+
 export interface FinalBlowModuleData {
 	api: typeof API;
 	socket: any;
