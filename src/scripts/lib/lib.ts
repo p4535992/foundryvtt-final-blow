@@ -673,7 +673,7 @@ export async function generateCardsFromToken(token: Token, actor: Actor, message
 				actor: <Actor>myData.actor,
 		  });
 
-	const msgData = {
+	const msgData = <any>{
 		content: await renderTemplate(`modules/${CONSTANTS.MODULE_NAME}/templates/finalBlowChatMessage.hbs`, {
 			injectData: myData,
 		}),
