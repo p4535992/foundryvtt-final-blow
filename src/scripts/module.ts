@@ -2,12 +2,15 @@ import API from "./api";
 import CONSTANTS from "./constants";
 import type { ActiveEffectManagerLibApi } from "./effects/effect-api";
 import { warn, error, debug, i18nFormat, renderDialogFinalBlow } from "./lib/lib";
+import { registerSocket } from "./socket";
 
 export let aemlApi: ActiveEffectManagerLibApi;
 
 export const initHooks = () => {
 	// warn("Init Hooks processing");
 	// setup all the hooks
+	Hooks.once("socketlib.ready", registerSocket);
+	registerSocket();
 };
 
 export const setupHooks = () => {
